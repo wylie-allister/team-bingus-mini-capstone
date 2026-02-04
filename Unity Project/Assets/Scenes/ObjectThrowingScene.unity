@@ -468,7 +468,7 @@ MonoBehaviour:
   currentThrowable: {fileID: 1676269941}
   throwTarget: {fileID: 1137188201}
   throwForceMax: 5
-  forceIncrease: 0.2
+  forceIncrease: 0.85
 --- !u!114 &1458491390
 MonoBehaviour:
   m_ObjectHideFlags: 0

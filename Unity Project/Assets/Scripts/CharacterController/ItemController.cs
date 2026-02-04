@@ -7,14 +7,13 @@ public class ItemController : MonoBehaviour
 {
     [Header("Input System")]
     public InputActionAsset InputActions;
-    private InputAction m_throwAction;
     
     [Header("Current Throwable")]
     public ThrowableObject currentThrowable;
     public Transform throwTarget;
 
     [Header("Throw Settings")]
-    private float throwForce = 0.0f;
+    public float throwForce = 0.0f;
     public float throwForceMax = 5.0f;
     public float forceIncrease = 0.2f;
     private bool isThrowing = false;
@@ -35,8 +34,6 @@ public class ItemController : MonoBehaviour
     // Bind throw context to isThrowing bool
     private void Awake()
     {
-        m_throwAction = InputActions.FindAction("Throw");
-        
         InputActions.FindAction("Throw").started += ctx => isThrowing = true;
         InputActions.FindAction("Throw").canceled += ctx => isThrowing = false;
     }
@@ -70,7 +67,7 @@ public class ItemController : MonoBehaviour
     }
     void Throw()
     {
-        Debug.Log($"ITEM THROWN WITH FORCE: {throwForce}");
+        //Debug.Log($"ITEM THROWN WITH FORCE: {throwForce}");
         
         // Throw item, reset force, disable isThrowing
         throwForce = 0.0f;
@@ -79,7 +76,7 @@ public class ItemController : MonoBehaviour
 
     void ChargeThrow()
     {
-        Debug.Log($"THROWCHARGE: {throwForce}");
+        //Debug.Log($"THROWCHARGE: {throwForce}");
         
         // If throw force is not at max, increase throw force
         if (throwForce < throwForceMax)

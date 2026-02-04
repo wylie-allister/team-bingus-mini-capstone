@@ -41,7 +41,6 @@ public class ItemController : MonoBehaviour
         InputActions.FindAction("Throw").canceled += ctx => isThrowing = false;
     }
     
-
     void Update()
     {
         // Don't attempt throw if no throwable object exists

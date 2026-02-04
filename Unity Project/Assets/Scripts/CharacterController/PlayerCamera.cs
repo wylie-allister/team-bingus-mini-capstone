@@ -30,7 +30,7 @@ public class PlayerCamera : MonoBehaviour
         // Get reference to look action on script awake
         private void Awake()
         {
-                m_lookAction = InputSystem.actions.FindAction("Look");
+                m_lookAction = InputActions.FindAction("Look");
         }
 
         // Get reference to player object (parent of camera)

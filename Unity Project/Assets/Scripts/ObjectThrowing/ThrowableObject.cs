@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ThrowableObject : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public ObjectData data;
+    public bool hasBeenThrown = false;
+    
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // If object is untagged, throw error - preventative
+        if (data.tag == ThrowableObjectTag.UNTAGGED || data.prefabModel == null)
+        {
+            Debug.LogError("OBJECT DATA NOT FOUND");
+        }
     }
 }

@@ -12,7 +12,7 @@ public class ThrowableObject : MonoBehaviour
         // If object is untagged, throw error - preventative
         if (data.tag == ThrowableObjectTag.UNTAGGED || data.prefabModel == null)
         {
-            Debug.LogError("OBJECT DATA NOT FOUND");
+            Debug.LogWarning("OBJECT DATA NOT FOUND");
         }
     }
 }

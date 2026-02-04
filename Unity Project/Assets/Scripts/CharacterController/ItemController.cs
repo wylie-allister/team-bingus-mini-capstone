@@ -44,6 +44,17 @@ public class ItemController : MonoBehaviour
 
     void Update()
     {
+        // Don't attempt throw if no throwable object exists
+        if (currentThrowable.data.tag == ThrowableObjectTag.UNTAGGED)
+        {
+            return;
+        }
+        
+        HandleThrow();
+    }
+
+    void HandleThrow()
+    {
         // If player is holding throw, charge throw
         // Else if player lets go of throw mid charge, throw object
         if (isThrowing)
@@ -58,7 +69,6 @@ public class ItemController : MonoBehaviour
             }
         }
     }
-    
     void Throw()
     {
         Debug.Log($"ITEM THROWN WITH FORCE: {throwForce}");

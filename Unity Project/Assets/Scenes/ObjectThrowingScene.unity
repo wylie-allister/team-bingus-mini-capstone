@@ -597,6 +597,7 @@ MonoBehaviour:
   itemController: {fileID: 0}
   timeRemaining: 0
   maxGameTime: 60
+  roarController: {fileID: 0}
 --- !u!1 &257970711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,6 +1224,8 @@ MonoBehaviour:
   throwSliderEnabled: 1
   throwSlider: {fileID: 1896453916}
   gameTimeSlider: {fileID: 34232807}
+  treeCountText: {fileID: 881606422}
+  roarSlider: {fileID: 1144580660}
 --- !u!1 &791513017
 GameObject:
   m_ObjectHideFlags: 0
@@ -2551,6 +2554,7 @@ GameObject:
   - component: {fileID: 1458491390}
   - component: {fileID: 1458491395}
   - component: {fileID: 1458491396}
+  - component: {fileID: 1458491397}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2711,6 +2715,22 @@ MonoBehaviour:
   throwForce: 0
   throwForceMax: 5
   forceIncrease: 0.85
+--- !u!114 &1458491397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458491388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28d3725c7dc9c747b89c36ed0b32ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InputActions: {fileID: -944628639613478452, guid: dc2f4651398e52f44898b261fd6d4437, type: 3}
+  roarCharge: 0
+  roarChargeRate: 1
+  roarMaxCharge: 30
 --- !u!1 &1608695640
 GameObject:
   m_ObjectHideFlags: 0

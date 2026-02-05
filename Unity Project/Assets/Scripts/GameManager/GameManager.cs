@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public ItemController itemController;
     
+    // Create singleton instance for this object
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -20,18 +21,17 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        
-
-
     }
 
     void Start()
     {
+        // If player reference is not manually set, find player object
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player");
         }
         
+        // Get player item controller
         itemController = player.GetComponent<ItemController>();
         
     }

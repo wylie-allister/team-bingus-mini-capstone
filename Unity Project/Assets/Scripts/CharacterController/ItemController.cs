@@ -16,7 +16,11 @@ public class ItemController : MonoBehaviour
     public float throwForce = 0.0f;
     public float throwForceMax = 5.0f;
     public float forceIncrease = 0.2f;
-    private bool isThrowing = false;
+    public bool isThrowing
+    {
+        get;
+        private set;
+    }
 
     // Enable Input Actions Map
     private void OnEnable()
@@ -36,6 +40,11 @@ public class ItemController : MonoBehaviour
     {
         InputActions.FindAction("Throw").started += ctx => isThrowing = true;
         InputActions.FindAction("Throw").canceled += ctx => isThrowing = false;
+    }
+
+    private void Start()
+    {
+        isThrowing = false;
     }
     
     void Update()
@@ -65,6 +74,7 @@ public class ItemController : MonoBehaviour
             }
         }
     }
+    
     void Throw()
     {
         //Debug.Log($"ITEM THROWN WITH FORCE: {throwForce}");

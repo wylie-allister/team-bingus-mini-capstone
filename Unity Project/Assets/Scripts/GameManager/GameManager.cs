@@ -12,8 +12,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Global Timer")] 
     public float timeRemaining;
-
     public float maxGameTime = 60.0f;
+
+    [Header("Roar Mechanic")] 
+    public RoarController roarController;
+
+    
     
     
     // Create singleton instance for this object
@@ -40,6 +44,7 @@ public class GameManager : MonoBehaviour
         
         // Get player item controller
         itemController = player.GetComponent<ItemController>();
+        roarController = player.GetComponent<RoarController>();
         
         // Set game timer to max
         timeRemaining = maxGameTime;
@@ -54,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     void HandleGameTimer()
     {
+        // Countdown game timer
         if (timeRemaining >= 0 )
         {
             timeRemaining -= Time.deltaTime;

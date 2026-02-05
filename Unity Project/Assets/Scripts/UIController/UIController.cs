@@ -1,22 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    [Header("Throw Slider")]
+    [Header("Throw Element")]
     public bool throwSliderEnabled = true;
     public Slider throwSlider;
     
-    [Header("Game Time Slider")]
+    [Header("Game Time Element")]
     public Slider gameTimeSlider;
 
+    [Header("Tree Count Element")] 
+    public TextMeshProUGUI treeCountText;
+    private int treeCount = 0;
+
+    [Header("Roar Element")] 
+    public Slider roarSlider;
+    
 
     void Update()
     {
         UpdateSliderActivity();
         UpdateSliderValues();
+
+        HandleTreeCount();
     }
 
     void UpdateSliderActivity()
@@ -28,13 +38,20 @@ public class UIController : MonoBehaviour
     
     void UpdateSliderValues()
     {
-        
+        // Set throw slider to player throw force
         if (throwSliderEnabled)
             throwSlider.value = NormalizeSliderValue(GameManager.Instance.itemController.throwForce, 0, GameManager.Instance.itemController.throwForceMax);
 
+        // Set game timer slider to proper value
         gameTimeSlider.value =
             NormalizeSliderValue(GameManager.Instance.timeRemaining, 0, GameManager.Instance.maxGameTime);
 
+        roarSlider.value = NormalizeSliderValue(GameManager.Instance.roarController.roarCharge, 0, GameManager.Instance.roarController.roarMaxCharge);
+    }
+
+    private void HandleTreeCount()
+    {
+        treeCountText.text = treeCount.ToString();
     }
     
     // Helper function to normalize slider values between 0 and 1
@@ -44,11 +61,14 @@ public class UIController : MonoBehaviour
     {
         // Return 0 if applicable
         if (max == min)
-        {
             return 0.0f;
-        }
 
-        // Else return a value between 0 and 1
+        // Else return the normalized value between 0 and 1
         return (value - min) / (max - min);
+    }
+
+    public void IncreaseTreeCount()
+    {
+        treeCount++;
     }
 }

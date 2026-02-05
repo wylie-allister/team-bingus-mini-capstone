@@ -8,6 +8,9 @@ public class UIController : MonoBehaviour
     [Header("Throw Slider")]
     public bool throwSliderEnabled = true;
     public Slider throwSlider;
+    
+    [Header("Game Time Slider")]
+    public Slider gameTimeSlider;
 
 
     void Update()
@@ -29,7 +32,9 @@ public class UIController : MonoBehaviour
         if (throwSliderEnabled)
             throwSlider.value = NormalizeSliderValue(GameManager.Instance.itemController.throwForce, 0, GameManager.Instance.itemController.throwForceMax);
 
-        
+        gameTimeSlider.value =
+            NormalizeSliderValue(GameManager.Instance.timeRemaining, 0, GameManager.Instance.maxGameTime);
+
     }
     
     // Helper function to normalize slider values between 0 and 1

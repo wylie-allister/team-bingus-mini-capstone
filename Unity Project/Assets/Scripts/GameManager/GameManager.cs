@@ -6,8 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [Header("Player References")]
     public GameObject player;
     public ItemController itemController;
+
+    [Header("Global Timer")] 
+    public float timeRemaining;
+
+    public float maxGameTime = 60.0f;
+    
     
     // Create singleton instance for this object
     void Awake()
@@ -34,10 +41,27 @@ public class GameManager : MonoBehaviour
         // Get player item controller
         itemController = player.GetComponent<ItemController>();
         
+        // Set game timer to max
+        timeRemaining = maxGameTime;
+        
+
     }
 
     void Update()
     {
-        
+        HandleGameTimer();
+    }
+
+    void HandleGameTimer()
+    {
+        if (timeRemaining >= 0 )
+        {
+            timeRemaining -= Time.deltaTime;
+        }
+        else
+        {
+            // TBD --- PLACE HOLDER
+            Debug.Log("GAME OVER");
+        }
     }
 }

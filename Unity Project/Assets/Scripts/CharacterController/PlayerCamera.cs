@@ -69,7 +69,5 @@ public class PlayerCamera : MonoBehaviour
 
                 // Rotate player to match camera rotation
                 player.transform.rotation = Quaternion.AngleAxis(mouseLook.x, player.transform.up);
-
         }
-
 }

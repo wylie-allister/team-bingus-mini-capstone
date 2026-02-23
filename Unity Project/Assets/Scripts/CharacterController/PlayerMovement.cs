@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     public InputActionAsset InputActions;
     private InputAction m_moveAction;
+    
     private Rigidbody m_rb;
 
     private Vector2 m_moveAmt;
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         InputActions.FindActionMap("Player").Disable();
     }
 
-    // Get reference to move action on script awake
+    // Get reference to move action and rigidbody on script awake
     private void Awake()
     {
         m_moveAction = InputActions.FindAction("Move");
@@ -66,7 +67,6 @@ public class PlayerMovement : MonoBehaviour
     
     private void HandleMovement()
     {
-        
         float h = m_moveAmt.x;
         
         // Clamp backwards movement for slower backwards speed, adjust as necessary -bc
@@ -81,5 +81,4 @@ public class PlayerMovement : MonoBehaviour
         // for now -bc
         m_rb.MovePosition(transform.position + movement * Time.deltaTime);
     }
-    
 }

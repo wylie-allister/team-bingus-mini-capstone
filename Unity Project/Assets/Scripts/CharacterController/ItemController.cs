@@ -7,6 +7,7 @@ public class ItemController : MonoBehaviour
 {
     [Header("Input System")]
     public InputActionAsset InputActions;
+    private InputAction m_interactAction;
     
     [Header("Current Throwable")]
     public ThrowableObject currentThrowable;
@@ -16,6 +17,8 @@ public class ItemController : MonoBehaviour
     public float throwForce = 0.0f;
     public float throwForceMax = 5.0f;
     public float forceIncrease = 0.2f;
+    public Transform throwHolder;
+    
     public bool isThrowing
     {
         get;
@@ -38,8 +41,10 @@ public class ItemController : MonoBehaviour
     // Bind throw context to isThrowing bool
     private void Awake()
     {
+        // Create thro
         InputActions.FindAction("Throw").started += ctx => isThrowing = true;
         InputActions.FindAction("Throw").canceled += ctx => isThrowing = false;
+        m_interactAction = InputActions.FindAction("Interact");
     }
 
     private void Start()
@@ -50,7 +55,7 @@ public class ItemController : MonoBehaviour
     void Update()
     {
         // Don't attempt throw if no throwable object exists
-        if (currentThrowable.data.tag == ThrowableObjectTag.UNTAGGED)
+        if (currentThrowable == null)
         {
             return;
         }
@@ -77,16 +82,21 @@ public class ItemController : MonoBehaviour
     
     void Throw()
     {
-        //Debug.Log($"ITEM THROWN WITH FORCE: {throwForce}");
+        // Remove throwable parent, enable mesh rendering
+        currentThrowable.transform.parent = null;
+        currentThrowable.EnableMesh();
         
-        // Throw item, reset force, disable isThrowing
+        // Get the rigidbody of the throwable and add throwforce impule
+        currentThrowable.GetComponent<Rigidbody>().AddForce(this.transform.forward * (throwForce * 750 * Time.deltaTime), ForceMode.Impulse);
+        currentThrowable = null;
+        
+        // Reset throw force and set is throwing to true
         throwForce = 0.0f;
         isThrowing = false;
     }
 
     void ChargeThrow()
     {
-        //Debug.Log($"THROWCHARGE: {throwForce}");
         
         // If throw force is not at max, increase throw force
         if (throwForce < throwForceMax)
@@ -98,6 +108,45 @@ public class ItemController : MonoBehaviour
             // If above max, set to max and throw
             throwForce = throwForceMax;
             Throw();
+        }
+    }
+
+    // If player with this script enters a throwable object trigger, checkpickup()
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Throwable"))
+        {
+            CheckPickup(other.gameObject);
+        }
+    }
+
+
+    private void CheckPickup(GameObject item)
+    {
+        // If the player presses interact
+        if (m_interactAction.WasPressedThisFrame())
+        {
+            // If there is a current throwable
+            if (currentThrowable != null)
+            {
+                // Set current throwable parent to nothing
+                currentThrowable.transform.parent = null;
+                
+                // Enable the mesh
+                currentThrowable.EnableMesh();
+                
+                // Set throwable to null
+                currentThrowable = null;
+            }
+            
+            // If there is now no throwable, get the throwable object
+            // Set position to throwholder position
+            // Disable visable rendering of the mesh
+            // Set parent to throwholder
+            currentThrowable = item.transform.parent.GetComponent<ThrowableObject>();
+            currentThrowable.transform.position = throwHolder.transform.position;
+            currentThrowable.DisableMesh();
+            currentThrowable.transform.SetParent(throwHolder);
         }
     }
 }

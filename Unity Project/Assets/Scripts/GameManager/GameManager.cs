@@ -17,8 +17,17 @@ public class GameManager : MonoBehaviour
     [Header("Roar Mechanic")] 
     public RoarController roarController;
 
+    [Header("Trees")]
+    public List<GameObject> trees;
     
-    
+    [Header("Terrain Dev")]
+    public TerrainGenerator terrainGenerator;
+
+    public GameObject throwableCanPrefab;
+    public int throwableCount = 50;
+    private List<GameObject> throwables =  new List<GameObject>();
+
+
     
     // Create singleton instance for this object
     void Awake()
@@ -48,8 +57,17 @@ public class GameManager : MonoBehaviour
         
         // Set game timer to max
         timeRemaining = maxGameTime;
-        
 
+        // Create new throwables based on throwable count
+        for (int i = 0; i < throwableCount; i++)
+        {
+            // Instantiate and set position to random position within -30x30 radius
+            GameObject newCan = Instantiate(throwableCanPrefab);
+            newCan.transform.position = new Vector3(Random.Range(-30, 30), 0, Random.Range(-30, 30));
+            
+            // Append to throwables
+            throwables.Add(newCan);
+        }
     }
 
     void Update()

@@ -19,18 +19,22 @@ public class RoarController : MonoBehaviour
 
     private void OnEnable()
     {
+        // Enable input map
         InputActions.FindActionMap("Player").Enable();
     }
 
     private void OnDisable()
     {
+        // Disable input map
         InputActions.FindActionMap("Player").Disable();
     }
 
     private void Awake()
     {
+        // Find roar action
         m_roarAction = InputActions.FindAction("Roar");
         
+        // Bind bool to input actions
         InputActions.FindAction("Roar").started += ctx => hasAttemptedRoar = true;
         InputActions.FindAction("Roar").canceled += ctx => hasAttemptedRoar = false;
     }
@@ -58,7 +62,5 @@ public class RoarController : MonoBehaviour
             roarCharge = 0;
             canRoar = false;
         }
-        
-        
     }
 }

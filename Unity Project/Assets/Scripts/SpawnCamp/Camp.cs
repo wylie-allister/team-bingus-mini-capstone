@@ -19,6 +19,7 @@ public class Camp : MonoBehaviour
     private GameObject _loggingTruckObject;
 
     [Header("Position Offsets")]
+    [SerializeField] private float _treeRemovalRadius = 9.0f;
     [SerializeField] private float _enemySpawnRadius = 5.0f;
     [SerializeField] private Vector3 _markedTreePositionOffset = new Vector3();
     [SerializeField] private Vector3 _loggingTruckPositionOffset = new Vector3();
@@ -37,6 +38,10 @@ public class Camp : MonoBehaviour
         
         // Update enemy spawn positions
         UpdateEnemySpawnPositions();
+
+        
+        //------------Make this work
+        //RemoveTreesNearCamp(GameManager.Instance.terrainGenerator.trees);
     }
 
     void InitializePrefabs(int enemyCount)
@@ -44,18 +49,20 @@ public class Camp : MonoBehaviour
         // Loop through enemy count, create new enemy and add to _enemies list
         for (int i = 0; i < enemyCount; i++)
         {
-           GameObject newEnemy = GameObject.Instantiate(_enemyPrefab);
-           newEnemy.transform.parent = transform;
+           GameObject newEnemy = GameObject.Instantiate(_enemyPrefab, this.transform);
+           newEnemy.transform.position = this.transform.position;
            _enemies.Add(newEnemy);
         }
 
         // Instantiate other prefabs for camp
-        _markedTreeObject = GameObject.Instantiate(_markedTreePrefab);
-        _loggingTruckObject = GameObject.Instantiate(_loggingTruckPrefab);
+        _markedTreeObject = GameObject.Instantiate(_markedTreePrefab, this.transform);
+        _markedTreeObject.transform.position = this.transform.position + _markedTreePositionOffset;
+        
+        _loggingTruckObject = GameObject.Instantiate(_loggingTruckPrefab, this.transform);
+        _loggingTruckObject.transform.position = this.transform.position + _loggingTruckPositionOffset;
+        
         
         // Set instantiated prefab parents to Camp object
-        _markedTreeObject.transform.parent = transform;
-        _loggingTruckObject.transform.parent = transform;
     }
 
     void UpdateEnemySpawnPositions()
@@ -63,18 +70,19 @@ public class Camp : MonoBehaviour
         // Loop through all enemies for this camp
         foreach (GameObject enemy in _enemies)
         {
+            //Debug.Log($"ET: {enemy.transform.position.x}, {enemy.transform.position.y}, {enemy.transform.position.z}");
             // Create temp transform where the given enemy is located
-            Transform tempTransform = enemy.transform;
+            //Transform tempTransform = enemy.transform;
             
             // Random rotation in the y-axis
-            tempTransform.Rotate(0f, Random.Range(0.0f, 360.0f), 0f);
+            enemy.transform.Rotate(0f, Random.Range(0.0f, 360.0f), 0f);
             
             // Position temp transform forward along the previously calc'd angle
             // multiplied by a random range, extending to the given spawn radius for this camp
-            tempTransform.position = tempTransform.forward * Random.Range(0.1f, _enemySpawnRadius);
+            enemy.transform.position += enemy.transform.forward * Random.Range(2f, _enemySpawnRadius);
             
             // Set enemy position to temp transform position
-            enemy.transform.position = tempTransform.position;
+            //enemy.transform.position = enemy.transform.position;
         }
     }
 
@@ -82,7 +90,38 @@ public class Camp : MonoBehaviour
     void Update()
     {
         // Apply position offsets to given objects
-        _markedTreeObject.transform.position = _markedTreePositionOffset;
-        _loggingTruckObject.transform.position = _loggingTruckPositionOffset;
+        
+    }
+
+    void RemoveTreesNearCamp(List<GameObject> trees)
+    {
+        for (int i = 0; i < trees.Count; i++)
+        {
+            if (TestFunc(trees[i].transform.position.x, trees[i].transform.position.y,
+                this.transform.position.x - _treeRemovalRadius, this.transform.position.x + _treeRemovalRadius,
+                this.transform.position.y - _treeRemovalRadius, this.transform.position.y + _treeRemovalRadius))//(IsPositionWithinRadius(trees[i].transform.position, this.transform.position, _treeRemovalRadius))
+            {
+                Destroy(trees[i].gameObject);
+                trees.RemoveAt(i);
+            }
+        }
+    }
+
+    // Test radius func -tbd/m
+    bool TestFunc(float pX, float pY, float minX, float maxX, float minY, float maxY)
+    {
+        bool withinX = pX >= minX && pX <= maxX;
+        bool withinY = pY >= minY && pY <= maxY;
+        
+        return withinX && withinY;
+    }
+    
+    bool IsPositionWithinRadius(Vector3 position, Vector3 point, float radius)
+    {
+        if (position.x > point.x - radius && position.x < point.x + radius)
+            if (position.y > point.y - radius && position.y < point.y + radius)
+                return true;
+
+        return false;
     }
 }

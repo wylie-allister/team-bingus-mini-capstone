@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
         agent.SetDestination(guardPoint);
     }
 
+    
     void Update()
     {
         RaycastHit hit;

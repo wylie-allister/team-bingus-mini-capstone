@@ -25,7 +25,6 @@ public class UIController : MonoBehaviour
     {
         UpdateSliderActivity();
         UpdateSliderValues();
-
         HandleTreeCount();
     }
 

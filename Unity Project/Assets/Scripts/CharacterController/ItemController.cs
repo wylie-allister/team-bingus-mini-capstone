@@ -88,6 +88,7 @@ public class ItemController : MonoBehaviour
         
         // Get the rigidbody of the throwable and add throwforce impule
         currentThrowable.GetComponent<Rigidbody>().AddForce(this.transform.forward * (throwForce * 750 * Time.deltaTime), ForceMode.Impulse);
+        currentThrowable.hasBeenThrown = true;
         currentThrowable = null;
         
         // Reset throw force and set is throwing to true
@@ -97,7 +98,6 @@ public class ItemController : MonoBehaviour
 
     void ChargeThrow()
     {
-        
         // If throw force is not at max, increase throw force
         if (throwForce < throwForceMax)
         {
@@ -119,7 +119,6 @@ public class ItemController : MonoBehaviour
             CheckPickup(other.gameObject);
         }
     }
-
 
     private void CheckPickup(GameObject item)
     {

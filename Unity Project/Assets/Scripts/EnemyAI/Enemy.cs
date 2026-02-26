@@ -140,9 +140,12 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("DistractionPoint"))
         {
-            Debug.Log("DISTRACTED");
-            distractionSourcePosition = collision.gameObject.transform.position;
-            isDistracted = true;
+            //Debug.Log("DISTRACTED");
+            if (collision.transform.GetComponentInParent<ThrowableObject>().hasBeenThrown)
+            {
+                distractionSourcePosition = collision.gameObject.transform.position;
+                isDistracted = true;
+            }
         }
     }
 }

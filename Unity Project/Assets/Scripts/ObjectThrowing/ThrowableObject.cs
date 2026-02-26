@@ -10,6 +10,7 @@ public class ThrowableObject : MonoBehaviour
     private Rigidbody rigidbody;
     public ObjectData data;
     public bool hasBeenThrown = false;
+    private float thrownTimer = 0;
     
     void Start()
     {
@@ -22,6 +23,20 @@ public class ThrowableObject : MonoBehaviour
         meshCollider = this.gameObject.GetComponent<MeshCollider>();
         rigidbody = this.gameObject.GetComponent<Rigidbody>();
         //Instantiate(data.prefabModel, this.transform);
+    }
+
+    public void Update()
+    {
+        if (hasBeenThrown)
+        {
+            thrownTimer += Time.deltaTime;
+        }
+
+        if (thrownTimer >= 2.5f)
+        {
+            thrownTimer = 0;
+            hasBeenThrown = false;
+        }
     }
 
     public void DisableMesh()

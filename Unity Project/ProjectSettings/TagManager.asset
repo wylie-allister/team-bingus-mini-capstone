@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TreeParent
   - Throwable
+  - DistractionPoint
   layers:
   - Default
   - TransparentFX

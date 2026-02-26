@@ -601,7 +601,7 @@ MonoBehaviour:
   trees: []
   terrainGenerator: {fileID: 820830928}
   throwableCanPrefab: {fileID: 6452554218078494560, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
-  throwableCount: 50
+  throwableCount: 0
 --- !u!1 &257970711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1529,7 +1529,7 @@ MonoBehaviour:
   - {fileID: 3222462524532879798, guid: 41adf5a86f0162643903cec421be4a21, type: 3}
   - {fileID: 2668530418329070070, guid: 26b393f3b981fe04587339e3a8d099f1, type: 3}
   treeParent: {fileID: 2035918151}
-  numberOfTrees: 350
+  numberOfTrees: 1
   treeSpawnRadius: {x: 80, y: 80}
   trees: []
   treeSpacingOffset: 2
@@ -2602,6 +2602,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &1243493790
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.8201907
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.023833275
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.5369158
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8681586
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.45376202
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.02050442
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.19995098
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -51.231
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 20.282
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964951131576862170, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -35.743
+      objectReference: {fileID: 0}
+    - target: {fileID: 6452554218078494560, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+      propertyPath: m_Name
+      value: ThrowableCan
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
 --- !u!1 &1265867604
 GameObject:
   m_ObjectHideFlags: 0
@@ -4492,3 +4549,4 @@ SceneRoots:
   - {fileID: 820830929}
   - {fileID: 2035918151}
   - {fileID: 2130886102}
+  - {fileID: 1243493790}

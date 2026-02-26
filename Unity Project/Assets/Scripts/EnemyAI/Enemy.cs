@@ -147,5 +147,11 @@ public class Enemy : MonoBehaviour
                 isDistracted = true;
             }
         }
+
+        if (collision.gameObject.CompareTag("RoarCollider"))
+        {
+            distractionSourcePosition = collision.gameObject.transform.position;
+            isDistracted = true;
+        }
     }
 }

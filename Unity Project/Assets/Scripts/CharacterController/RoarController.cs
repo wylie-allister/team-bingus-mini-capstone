@@ -12,10 +12,14 @@ public class RoarController : MonoBehaviour
     [Header("Roar Mechanic")] 
     private bool canRoar = false;
     private bool hasAttemptedRoar = false;
+    private bool isColliderEnabled = false;
     public float roarCharge = 0.0f;
     public float roarChargeRate = 1.0f;
     public float roarMaxCharge = 30.0f;
     private float roarRange = 10.0f;
+    public GameObject roarCollider;
+
+    private float roarColliderTimer = 0.0f;
 
     private void OnEnable()
     {
@@ -47,7 +51,12 @@ public class RoarController : MonoBehaviour
             canRoar = true;
             roarCharge = roarMaxCharge;
         }
-        
+
+        if (roarCollider.GetComponent<SphereCollider>().radius != roarRange)
+        {
+            roarCollider.GetComponent<SphereCollider>().radius = roarRange;
+        }
+
         // If player cannot roar, charge roar
         if (!canRoar)
         {
@@ -59,8 +68,27 @@ public class RoarController : MonoBehaviour
         {
             // TBD -------- 
             Debug.Log("PLAYER ROARED");
+            isColliderEnabled = true;
             roarCharge = 0;
             canRoar = false;
+        }
+
+        HandleRoarCollider();
+    }
+
+    void HandleRoarCollider()
+    {
+        roarCollider.SetActive(isColliderEnabled);
+        
+        if (isColliderEnabled)
+        {
+            roarColliderTimer += Time.deltaTime;
+
+            if (roarColliderTimer >= 1.5f)
+            {
+                isColliderEnabled = false;
+                roarColliderTimer = 0.0f;
+            }
         }
     }
 }

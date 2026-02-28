@@ -66,6 +66,7 @@ public class TerrainGenerator : MonoBehaviour
         
         // Set tree position to new random position
         tree.transform.position = randomPosition;
+        tree.transform.SetParent(treeParent);
     }
 
     public void SpawnCamps()

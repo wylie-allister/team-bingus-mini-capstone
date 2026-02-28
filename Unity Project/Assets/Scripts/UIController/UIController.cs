@@ -20,6 +20,9 @@ public class UIController : MonoBehaviour
 
     [Header("Roar Element")] 
     public Slider roarSlider;
+
+    [Header("Stamina Element")] 
+    public Slider staminaSlider;
     
 
     void Update()
@@ -62,6 +65,8 @@ public class UIController : MonoBehaviour
             NormalizeSliderValue(GameManager.Instance.timeRemaining, 0, GameManager.Instance.maxGameTime);
 
         roarSlider.value = NormalizeSliderValue(GameManager.Instance.roarController.roarCharge, 0, GameManager.Instance.roarController.roarMaxCharge);
+        
+        staminaSlider.value = NormalizeSliderValue(GameManager.Instance.player.GetComponent<PlayerMovement>().currentStamina, 0, GameManager.Instance.player.GetComponent<PlayerMovement>().maxStamina);
     }
 
     private void HandleTreeCount()

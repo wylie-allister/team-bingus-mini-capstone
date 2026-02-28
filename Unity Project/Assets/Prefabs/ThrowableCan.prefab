@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5286371163620240968}
   - component: {fileID: 8935619378526094121}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PickupSphere
   m_TagString: Throwable
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6493363273004369447}
   - component: {fileID: 1104189464213958753}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DistractionSphere
   m_TagString: DistractionPoint
   m_Icon: {fileID: 0}
@@ -173,6 +173,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 539ca4163f7f9e840b8256b7a23ec971, type: 3}
       propertyPath: m_Name
       value: ThrowableCan
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 539ca4163f7f9e840b8256b7a23ec971, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 539ca4163f7f9e840b8256b7a23ec971, type: 3}
       propertyPath: m_TagString

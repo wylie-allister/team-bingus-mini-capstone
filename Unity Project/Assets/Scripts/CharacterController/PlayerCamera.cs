@@ -10,7 +10,7 @@ public class PlayerCamera : MonoBehaviour
         private Vector2 mouseLook;
         private Vector2 smoothMovement;
         
-        private GameObject player;
+        public GameObject player;
         
         public float lookSensitivity = 5.0f;
         public float smoothing = 1.5f;
@@ -36,7 +36,7 @@ public class PlayerCamera : MonoBehaviour
         // Get reference to player object (parent of camera)
         private void Start()
         {
-                player = transform.parent.gameObject;
+                player = GameObject.FindGameObjectWithTag("Player");
         }
 
         private void Update()

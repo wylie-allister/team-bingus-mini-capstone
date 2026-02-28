@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public TerrainGenerator terrainGenerator;
 
     public GameObject throwableCanPrefab;
+    public GameObject throwableParent;
     public int throwableCount = 50;
     private List<GameObject> throwables =  new List<GameObject>();
 
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
             
             // Append to throwables
             throwables.Add(newCan);
+            newCan.transform.SetParent(throwableParent.transform);
         }
     }
 

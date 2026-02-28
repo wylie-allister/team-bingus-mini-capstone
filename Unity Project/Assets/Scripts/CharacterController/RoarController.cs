@@ -41,6 +41,8 @@ public class RoarController : MonoBehaviour
         // Bind bool to input actions
         InputActions.FindAction("Roar").started += ctx => hasAttemptedRoar = true;
         InputActions.FindAction("Roar").canceled += ctx => hasAttemptedRoar = false;
+        
+        roarCollider.GetComponent<SphereCollider>().radius = roarRange;
     }
 
     void Update()
@@ -50,11 +52,6 @@ public class RoarController : MonoBehaviour
         {
             canRoar = true;
             roarCharge = roarMaxCharge;
-        }
-
-        if (roarCollider.GetComponent<SphereCollider>().radius != roarRange)
-        {
-            roarCollider.GetComponent<SphereCollider>().radius = roarRange;
         }
 
         // If player cannot roar, charge roar
@@ -84,7 +81,7 @@ public class RoarController : MonoBehaviour
         {
             roarColliderTimer += Time.deltaTime;
 
-            if (roarColliderTimer >= 1.5f)
+            if (roarColliderTimer >= 0.5f)
             {
                 isColliderEnabled = false;
                 roarColliderTimer = 0.0f;

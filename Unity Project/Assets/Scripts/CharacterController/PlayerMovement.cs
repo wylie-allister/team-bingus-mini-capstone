@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     public InputActionAsset InputActions;
     private InputAction m_moveAction;
+    private InputAction m_sprintAction;
     
     private Rigidbody m_rb;
 
@@ -14,11 +15,23 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movement;
 
     public float walkSpeed = 5.0f;
+    public float sprintSpeed = 9.0f;
+    private float currentSpeed;
     public float strafeSpeed = 4.0f;
     public float walkSpeedOffset = 0.5f;
+    private bool isSprinting = false;
+    private bool canSprint = true;
+
+    public float currentStamina { get; private set; }
+    public float maxStamina = 30.0f;
+    public float sprintStaminaTax = 7.5f;
+    public float sprintRegenRate = 5.0f;
+    
 
     private bool isGrounded;
     public LayerMask groundLayer;
+
+    public Transform cam;
 
     // Enable Input Actions Map
     private void OnEnable()
@@ -36,7 +49,14 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         m_moveAction = InputActions.FindAction("Move");
+
+        InputActions.FindAction("Sprint").started += ctx => isSprinting = true;
+        InputActions.FindAction("Sprint").canceled += ctx => isSprinting = false;
+        
         m_rb = GetComponent<Rigidbody>();
+        currentSpeed = walkSpeed;
+        currentStamina = maxStamina;
+        
     }
 
     private void Update()
@@ -50,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        HandleSprint();
         HandleMovement();
     }
 
@@ -64,6 +85,39 @@ public class PlayerMovement : MonoBehaviour
 
         return false;
     }
+
+    private void HandleSprint()
+    {
+        if (!isSprinting)
+        {
+            if (currentStamina < maxStamina)
+            {
+                currentStamina += sprintRegenRate * Time.deltaTime;
+            }
+            else
+            {
+                currentStamina = maxStamina;
+                canSprint = true;
+            }
+            
+        }
+        
+        if (currentStamina <= 0.0f)
+        {
+            canSprint = false;
+        }
+        
+        if (isSprinting && canSprint)
+        {
+            currentStamina -= sprintStaminaTax * Time.deltaTime;
+            currentSpeed = sprintSpeed;
+        }
+        else
+        {
+            currentSpeed = walkSpeed;
+        }
+    }
+    
     
     private void HandleMovement()
     {
@@ -71,11 +125,21 @@ public class PlayerMovement : MonoBehaviour
         
         // Clamp backwards movement for slower backwards speed, adjust as necessary -bc
         float v = Mathf.Clamp(m_moveAmt.y, -0.5f, 1.0f);
-        Vector3.Normalize(movement);
+        
+        
+        
+        Vector3 movement = cam.transform.right * h * strafeSpeed + cam.transform.forward * v * currentSpeed;
+        movement.y = 0.0f;
 
-        // Apply movement input vector to movement var
-        movement = (transform.forward * v * walkSpeed * walkSpeedOffset) +
-                   (transform.right * h * strafeSpeed * walkSpeedOffset);
+        if (movement.magnitude != 0f)
+        {
+            transform.Rotate(Vector3.up * h * cam.GetComponent<CameraScript>().sensitivity * Time.deltaTime);
+            Quaternion camRot = cam.rotation;
+            camRot.x = 0.0f;
+            camRot.z = 0.0f;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, camRot, 0.2f);
+        }
         
         // Translate rigidbody by given position - We will probably want to swap to velocity based, but this is fine
         // for now -bc

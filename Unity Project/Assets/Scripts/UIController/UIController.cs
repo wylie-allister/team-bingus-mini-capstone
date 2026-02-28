@@ -9,6 +9,7 @@ public class UIController : MonoBehaviour
     [Header("Throw Element")]
     public bool throwSliderEnabled = true;
     public Slider throwSlider;
+    public GameObject canIconObject;
     
     [Header("Game Time Element")]
     public Slider gameTimeSlider;
@@ -26,12 +27,27 @@ public class UIController : MonoBehaviour
         UpdateSliderActivity();
         UpdateSliderValues();
         HandleTreeCount();
+        HandleItemIcon();
     }
 
+
+    void HandleItemIcon()
+    {
+        if (GameManager.Instance.itemController.currentThrowable == null)
+        {
+            canIconObject.SetActive(false);
+        }
+        else
+        {
+            canIconObject.SetActive(true);
+        }
+        
+    }
+    
     void UpdateSliderActivity()
     {
         // Enable / Disable UI elements as needed
-        throwSliderEnabled = GameManager.Instance.itemController.isThrowing;
+        throwSliderEnabled = GameManager.Instance.itemController.isThrowing && GameManager.Instance.itemController.currentThrowable != null;
         throwSlider.gameObject.SetActive(throwSliderEnabled);
     }
     

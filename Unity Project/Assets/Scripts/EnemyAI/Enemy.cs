@@ -80,7 +80,6 @@ public class Enemy : MonoBehaviour
             obtainNewDistractPoint = true;
             agent.SetDestination(spawnPoint);
         }
-        
     }
 
     // Guards between enemy spawn point and a given guard point

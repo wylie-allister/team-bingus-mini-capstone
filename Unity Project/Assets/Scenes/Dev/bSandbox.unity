@@ -601,6 +601,7 @@ MonoBehaviour:
   trees: []
   terrainGenerator: {fileID: 820830928}
   throwableCanPrefab: {fileID: 6452554218078494560, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
+  throwableParent: {fileID: 0}
   throwableCount: 0
 --- !u!1 &257970711
 GameObject:
@@ -1453,6 +1454,7 @@ MonoBehaviour:
   gameTimeSlider: {fileID: 34232807}
   treeCountText: {fileID: 881606422}
   roarSlider: {fileID: 1144580660}
+  staminaSlider: {fileID: 2007458967}
 --- !u!1 &791513017
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,7 +2151,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a60078f6d31883045ab8fc3cd5357a8a, type: 2}
+  - {fileID: 2100000, guid: e81c055a8e81f724fa9e94415e33b98b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2778,11 +2780,11 @@ Transform:
   m_GameObject: {fileID: 1265867604}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.88, y: 1.3, z: -2.17}
+  m_LocalPosition: {x: 0.47000003, y: 2.53, z: -3.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1458491394}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1265867608
 MonoBehaviour:
@@ -2791,14 +2793,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265867604}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8a392e3bf359584d8eed8afd468f654, type: 3}
+  m_Script: {fileID: 11500000, guid: c6699e72459d5654783dcf729ca2e4ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InputActions: {fileID: -944628639613478452, guid: dc2f4651398e52f44898b261fd6d4437, type: 3}
-  lookSensitivity: 1
-  smoothing: 0.25
+  target: {fileID: 1635680067}
+  distance: 3
+  sensitivity: 8
 --- !u!1 &1268052603
 GameObject:
   m_ObjectHideFlags: 0
@@ -3082,12 +3085,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InputActions: {fileID: -944628639613478452, guid: dc2f4651398e52f44898b261fd6d4437, type: 3}
-  walkSpeed: 10.59
+  walkSpeed: 5
+  sprintSpeed: 9
   strafeSpeed: 4.3
   walkSpeedOffset: 0.5
+  maxStamina: 30
+  sprintStaminaTax: 8
+  sprintRegenRate: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  cam: {fileID: 1265867607}
 --- !u!136 &1458491391
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3174,10 +3182,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1265867607}
   - {fileID: 517190752}
   - {fileID: 2127861779}
   - {fileID: 1292710783}
+  - {fileID: 1635680067}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1458491395
@@ -3323,6 +3331,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608695640}
   m_CullTransparentMesh: 1
+--- !u!1 &1635680066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1635680067}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1635680067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635680066}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.48, y: 0.56, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1458491394}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1665400818
 GameObject:
   m_ObjectHideFlags: 0
@@ -4705,6 +4744,7 @@ SceneRoots:
   - {fileID: 1137188201}
   - {fileID: 1676269945}
   - {fileID: 1964297597}
+  - {fileID: 1265867607}
   - {fileID: 1458491394}
   - {fileID: 965238710}
   - {fileID: 789524342}

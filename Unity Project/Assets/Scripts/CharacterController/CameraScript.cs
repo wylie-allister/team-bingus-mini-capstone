@@ -34,22 +34,18 @@ public class CameraScript : MonoBehaviour
         m_lookAction = InputActions.FindAction("Look");
     }
     
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
+        // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         
+        // Get mouse input
         m_lookAmt = m_lookAction.ReadValue<Vector2>();
 
-        currentX += m_lookAmt.x;
-        currentY -= m_lookAmt.y;
+        // Get current values from input and sensitivity, clamp Y access
+        currentX += m_lookAmt.x * sensitivity * Time.deltaTime;
+        currentY -= m_lookAmt.y * sensitivity * Time.deltaTime;
         currentY = Mathf.Clamp(currentY, -24, 65);
-
-
     }
     
     void LateUpdate()

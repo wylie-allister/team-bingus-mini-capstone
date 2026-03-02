@@ -1616,7 +1616,7 @@ MonoBehaviour:
   - {fileID: 3222462524532879798, guid: 41adf5a86f0162643903cec421be4a21, type: 3}
   - {fileID: 2668530418329070070, guid: 26b393f3b981fe04587339e3a8d099f1, type: 3}
   treeParent: {fileID: 2035918151}
-  numberOfTrees: 0
+  numberOfTrees: 10
   treeSpawnRadius: {x: 80, y: 80}
   trees: []
   treeSpacingOffset: 2

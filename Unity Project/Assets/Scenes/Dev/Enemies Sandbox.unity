@@ -2797,7 +2797,7 @@ MonoBehaviour:
   InputActions: {fileID: -944628639613478452, guid: dc2f4651398e52f44898b261fd6d4437, type: 3}
   target: {fileID: 410360010}
   distance: 3.25
-  sensitivity: 1
+  sensitivity: 6.05
 --- !u!1 &1268052603
 GameObject:
   m_ObjectHideFlags: 0

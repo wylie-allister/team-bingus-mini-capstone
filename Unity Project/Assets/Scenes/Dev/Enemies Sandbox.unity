@@ -1616,7 +1616,7 @@ MonoBehaviour:
   - {fileID: 3222462524532879798, guid: 41adf5a86f0162643903cec421be4a21, type: 3}
   - {fileID: 2668530418329070070, guid: 26b393f3b981fe04587339e3a8d099f1, type: 3}
   treeParent: {fileID: 2035918151}
-  numberOfTrees: 350
+  numberOfTrees: 0
   treeSpawnRadius: {x: 80, y: 80}
   trees: []
   treeSpacingOffset: 2
@@ -2278,7 +2278,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 4e69ef18ae1a17c44b88c4ff248b92d5, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 136e63607ec351647b274a867914767d, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &1142236166
 GameObject:

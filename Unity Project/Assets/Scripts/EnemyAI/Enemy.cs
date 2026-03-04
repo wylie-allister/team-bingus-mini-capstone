@@ -58,24 +58,32 @@ public class Enemy : MonoBehaviour
 
     void HandleDistraction()
     {
+        // If not distracted, break from logic
         if (!isDistracted)
             return;
 
+        // If distracted, set idle to false
         isIdle = false;
         
+        // If we need a new distraction point
         if (distractionSourcePosition != null && agent.destination != finalDistractionPoint && obtainNewDistractPoint)
         {
+            // Get direction between where the distraction source is from, normalize, scale, and apply transform
             finalDistractionPoint =  GetDirectionXZ(distractionSourcePosition, true);
             finalDistractionPoint = Vector3.Normalize(finalDistractionPoint) * 15 ;
             finalDistractionPoint += this.transform.position;
             
-            
+            // Set nav agent destination to new position
             agent.SetDestination(finalDistractionPoint);
+            
+            // Prevent update of new distraction point
             obtainNewDistractPoint = false;
         }
 
+        // If we are within a given range of the distraction point
         if (IsAtPointWithinRange(finalDistractionPoint, 2.0f))
         {
+            // Not distracted, can obtain new distraction point, move to spawn
             isDistracted = false;
             obtainNewDistractPoint = true;
             agent.SetDestination(spawnPoint);
@@ -85,6 +93,7 @@ public class Enemy : MonoBehaviour
     // Guards between enemy spawn point and a given guard point
     void HandleGuarding()
     {
+        // If idling or distracting, break from logic
         if (isIdle || isDistracted)
         {
             return;
@@ -101,15 +110,8 @@ public class Enemy : MonoBehaviour
             agent.SetDestination(spawnPoint);
         }
     }
-
-    bool isAtPoint(Vector3 point)
-    {
-        if (this.transform.position.x == point.x && this.transform.position.z == point.z)
-            return true;
-        
-        return false;
-    }
-
+    
+    // Return whether a point is within a given range of this object, or not
     bool IsAtPointWithinRange(Vector3 point, float range)
     {
         if (this.transform.position.x >= point.x - range && this.transform.position.x <= point.x + range)
@@ -121,6 +123,7 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
+    // Returns the direction from this object to a given point, swappable
     Vector3 GetDirectionXZ(Vector3 point, bool swapDir = false)
     {
         if (swapDir)
@@ -137,9 +140,10 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        // If enemy collides with a distraction point
         if (collision.gameObject.CompareTag("DistractionPoint"))
         {
-            //Debug.Log("DISTRACTED");
+            // If object is throwable, set to distracted
             if (collision.transform.GetComponentInParent<ThrowableObject>().hasBeenThrown)
             {
                 distractionSourcePosition = collision.gameObject.transform.position;
@@ -147,8 +151,10 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        // If enemy collides with roarcollider
         if (collision.gameObject.CompareTag("RoarCollider"))
         {
+            // Move away from player
             distractionSourcePosition = collision.gameObject.transform.position;
             isDistracted = true;
         }

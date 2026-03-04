@@ -656,6 +656,7 @@ MonoBehaviour:
   throwableCanPrefab: {fileID: 6452554218078494560, guid: f49026abece2b664c97aad753b71f8a6, type: 3}
   throwableParent: {fileID: 2147347822}
   throwableCount: 50
+  activeAlertStars: 0
 --- !u!1 &257970711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,6 +1509,7 @@ MonoBehaviour:
   treeCountText: {fileID: 881606422}
   roarSlider: {fileID: 1144580660}
   staminaSlider: {fileID: 2007458967}
+  alertStarHolder: {fileID: 151808866}
 --- !u!1 &791513017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1616,13 +1618,15 @@ MonoBehaviour:
   - {fileID: 3222462524532879798, guid: 41adf5a86f0162643903cec421be4a21, type: 3}
   - {fileID: 2668530418329070070, guid: 26b393f3b981fe04587339e3a8d099f1, type: 3}
   treeParent: {fileID: 2035918151}
-  numberOfTrees: 10
+  numberOfTrees: 0
   treeSpawnRadius: {x: 80, y: 80}
   trees: []
   treeSpacingOffset: 2
   campPrefab: {fileID: 8346407509852699545, guid: d226a2ff260149849810ed1e70cef51b, type: 3}
   campParent: {fileID: 2130886101}
   campCount: 5
+  grassPrefab: {fileID: 1781206636339529770, guid: 39161a3ed51eac141b950f9193ee3ea5, type: 3}
+  grassInstanceCount: 0
 --- !u!4 &820830929
 Transform:
   m_ObjectHideFlags: 0

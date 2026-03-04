@@ -20,6 +20,12 @@ public class TerrainGenerator : MonoBehaviour
     List<GameObject> camps = new List<GameObject>();
     public GameObject campParent;
     public int campCount = 5;
+    
+    [Header("Grass")]
+    public GameObject grassPrefab;
+
+    public int grassInstanceCount = 0;
+    
 
 
     void Awake()
@@ -30,6 +36,7 @@ public class TerrainGenerator : MonoBehaviour
     void Start()
     {
         SpawnCamps();
+
     }
 
     // Update is called once per frame

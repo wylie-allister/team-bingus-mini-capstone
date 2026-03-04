@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _markedTreePrefab: {fileID: 1231143827019894038, guid: 687c01d89f7951248b021bb057682d05, type: 3}
   _loggingTruckPrefab: {fileID: 9203945236095473122, guid: 2085cf298433e0b4aa063faba6cdc6d5, type: 3}
-  _enemyPrefab: {fileID: 2034421842825797817, guid: 4a6d277a231c891448d5b5cd8a64fe85, type: 3}
+  _enemyPrefab: {fileID: 1548126887056500522, guid: 60e84b662a80deb4a927da4187a87ce1, type: 3}
   _campEnemyCount: 4
   _treeRemovalRadius: 9
   _enemySpawnRadius: 10

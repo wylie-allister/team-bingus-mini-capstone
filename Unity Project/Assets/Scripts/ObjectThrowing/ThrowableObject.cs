@@ -7,7 +7,7 @@ public class ThrowableObject : MonoBehaviour
 {
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
-    private Rigidbody rigidbody;
+    private Rigidbody rb;
     public ObjectData data;
     public bool hasBeenThrown = false;
     private float thrownTimer = 0;
@@ -21,7 +21,7 @@ public class ThrowableObject : MonoBehaviour
         }
         meshRenderer = this.gameObject.GetComponent<MeshRenderer>();
         meshCollider = this.gameObject.GetComponent<MeshCollider>();
-        rigidbody = this.gameObject.GetComponent<Rigidbody>();
+        rb = this.gameObject.GetComponent<Rigidbody>();
         //Instantiate(data.prefabModel, this.transform);
     }
 
@@ -44,7 +44,7 @@ public class ThrowableObject : MonoBehaviour
         // Disable meshrenderer and mesh collider, disable rigidbody sim
         meshRenderer.enabled = false;
         meshCollider.enabled = false;
-        rigidbody.isKinematic = true;
+        rb.isKinematic = true;
     }
     
     public void  EnableMesh()
@@ -52,7 +52,7 @@ public class ThrowableObject : MonoBehaviour
         // Enable meshrenderer and mesh collider, enable rigidbody sim
         meshRenderer.enabled = true;
         meshCollider.enabled = true;
-        rigidbody.isKinematic = false;
+        rb.isKinematic = false;
     }
 
 }

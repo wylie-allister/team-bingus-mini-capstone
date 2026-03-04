@@ -23,6 +23,10 @@ public class UIController : MonoBehaviour
 
     [Header("Stamina Element")] 
     public Slider staminaSlider;
+
+    [Header("Alert Element")] 
+    public GameObject alertStarHolder;
+    
     
 
     void Update()
@@ -31,8 +35,30 @@ public class UIController : MonoBehaviour
         UpdateSliderValues();
         HandleTreeCount();
         HandleItemIcon();
+        HandleAlertStars();
     }
 
+    void HandleAlertStars()
+    {
+        if (alertStarHolder == null || alertStarHolder.transform.childCount == 0)
+        {
+            Debug.LogWarning("Alert Star Holder does not exist / Has no child objects");
+            return;
+        }
+        
+        
+        for (int i = 0; i < 5; i++)
+        {
+            if (i < GameManager.Instance.activeAlertStars)
+            {
+                alertStarHolder.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            else
+            {
+                alertStarHolder.transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+    }
 
     void HandleItemIcon()
     {

@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     public int throwableCount = 50;
     private List<GameObject> throwables =  new List<GameObject>();
 
+    [Header("Alert Mechanic")] 
+    public int activeAlertStars = 0;
+
 
     
     // Create singleton instance for this object
@@ -75,6 +78,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         HandleGameTimer();
+        HandleAlertMechanic();
     }
 
     void HandleGameTimer()
@@ -88,6 +92,29 @@ public class GameManager : MonoBehaviour
         {
             // TBD --- PLACE HOLDER
             Debug.Log("GAME OVER");
+            //SceneController.GameOver();
         }
+    }
+
+    void HandleAlertMechanic()
+    {
+        if (activeAlertStars == 5)
+        {
+            //SceneController.GameOver();
+        }
+    }
+
+    // Adds an alert start to active alert stars
+    public void AddAlertStar()
+    {
+        if (activeAlertStars < 5)
+            activeAlertStars++;
+    }
+
+    // Removes an alert start to active alert stars
+    public void RemoveAlertStar()
+    {
+        if (activeAlertStars > 0)
+            activeAlertStars--;
     }
 }

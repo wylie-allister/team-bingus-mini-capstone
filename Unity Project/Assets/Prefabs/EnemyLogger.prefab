@@ -288,10 +288,10 @@ PrefabInstance:
       addedObject: {fileID: -3569542903150773897}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 26a4111b1624db14abd25d0112dc8378, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2438927830700696582}
+      addedObject: {fileID: 4512730568928918980}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 26a4111b1624db14abd25d0112dc8378, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4512730568928918980}
+      addedObject: {fileID: 6751262783512889828}
   m_SourcePrefab: {fileID: 100100000, guid: 26a4111b1624db14abd25d0112dc8378, type: 3}
 --- !u!4 &1688963452390685187 stripped
 Transform:
@@ -319,28 +319,6 @@ MonoBehaviour:
   distractionSourcePosition: {x: 0, y: 0, z: 0}
   isDistracted: 0
   exclaimMarkerObject: {fileID: 692941951498476950}
---- !u!195 &2438927830700696582
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2034421842825797817}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 2.9
-  m_Acceleration: 7.7
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: -0.22
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!136 &4512730568928918980
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -364,3 +342,25 @@ CapsuleCollider:
   m_Height: 5.9174848
   m_Direction: 1
   m_Center: {x: 0, y: 3.2199118, z: 0}
+--- !u!195 &6751262783512889828
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034421842825797817}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2.9
+  m_Acceleration: 7.7
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: -0.22
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

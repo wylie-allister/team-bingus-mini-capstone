@@ -18,6 +18,9 @@ public class RoarController : MonoBehaviour
     public float roarMaxCharge = 30.0f;
     private float roarRange = 10.0f;
     public GameObject roarCollider;
+    
+    [Header("Audio")]
+    public AudioClip roarSound;
 
     private float roarColliderTimer = 0.0f;
 
@@ -64,7 +67,11 @@ public class RoarController : MonoBehaviour
         if (canRoar && hasAttemptedRoar)
         {
             // TBD -------- 
-            Debug.Log("PLAYER ROARED");
+            if (AudioController.Instance != null)
+            {
+                AudioController.Instance.PlaySoundClip(roarSound, 0.6f);
+            }
+            
             isColliderEnabled = true;
             roarCharge = 0;
             canRoar = false;

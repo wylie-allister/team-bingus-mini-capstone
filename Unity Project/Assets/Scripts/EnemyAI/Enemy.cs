@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     private Vector3 spawnPoint;
     private Vector3 guardPoint;
     public Vector3 finalDistractionPoint;
+    private GameObject playerObject;
 
     private bool isIdle = false;
     public Vector3 distractionSourcePosition;
@@ -17,6 +18,10 @@ public class Enemy : MonoBehaviour
     private bool obtainNewDistractPoint = true;
 
     public GameObject exclaimMarkerObject;
+
+    private bool hasSpottedSas = false;
+    private float sasSpotTimer = 0.0f;
+    private float sasSpotTimerMax = 2.0f;
 
     void Start()
     {
@@ -32,7 +37,9 @@ public class Enemy : MonoBehaviour
         // Set nav agent destination to guardpoint
         agent.SetDestination(guardPoint);
         exclaimMarkerObject.SetActive(false);
-        
+
+        playerObject = GameManager.Instance.player;
+
     }
 
     
@@ -53,9 +60,55 @@ public class Enemy : MonoBehaviour
 
         HandleGuarding();
         HandleDistraction();
-
+        HandleVision();
     }
 
+    void HandleVision()
+    {
+        Vector3 origin = transform.position;
+        origin.y = 1.5f;
+        Vector3 dir = transform.forward;
+        float maxDist = 10.0f;
+        RaycastHit hit;
+        
+        // Scene debug ray call to visualize the distance of the enemy vision
+        //Debug.DrawRay(origin, dir * maxDist);
+
+        if (Physics.Raycast(origin, dir, out hit, maxDist))
+        {
+            if (hit.transform.gameObject.CompareTag("Player"))
+            {
+                Debug.Log("Player Seen!!!");
+                hasSpottedSas = true;
+            }
+        }
+
+        HandleSasSpot();
+    }
+
+    void HandleSasSpot()
+    {
+		// If the neemy hasnt spotted sas, break from logic and set timer to 0
+        if (!hasSpottedSas)
+        {
+            sasSpotTimer = 0.0f;
+            return;
+        }
+        
+        // If enemy has spotted sas, run timer
+        sasSpotTimer += Time.deltaTime;
+        
+        // If timer is greater than timer max, stop spotting sas
+        if (sasSpotTimer >= sasSpotTimerMax)
+        {
+            hasSpottedSas = false;
+            return;
+        }
+        
+        
+
+    }
+    
     void HandleDistraction()
     {
         // If not distracted, break from logic

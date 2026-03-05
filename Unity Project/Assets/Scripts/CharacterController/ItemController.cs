@@ -18,6 +18,9 @@ public class ItemController : MonoBehaviour
     public float throwForceMax = 5.0f;
     public float forceIncrease = 0.2f;
     public Transform throwHolder;
+
+    [Header("Audio")] 
+    public AudioClip throwSound;
     
     public bool isThrowing
     {
@@ -52,7 +55,7 @@ public class ItemController : MonoBehaviour
         isThrowing = false;
     }
     
-    void Update()
+    void FixedUpdate()
     {
         // Don't attempt throw if no throwable object exists
         if (currentThrowable == null)
@@ -94,6 +97,9 @@ public class ItemController : MonoBehaviour
         // Reset throw force and set is throwing to true
         throwForce = 0.0f;
         isThrowing = false;
+        
+        if (AudioController.Instance != null)
+            AudioController.Instance.PlaySoundClip(throwSound, 0.5f);
     }
 
     void ChargeThrow()

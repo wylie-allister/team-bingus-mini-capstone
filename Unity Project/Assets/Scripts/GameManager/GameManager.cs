@@ -62,6 +62,10 @@ public class GameManager : MonoBehaviour
         // Set game timer to max
         timeRemaining = maxGameTime;
 
+        // Start day ambience
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayDayAmbience();
+
         // Create new throwables based on throwable count
         for (int i = 0; i < throwableCount; i++)
         {
@@ -92,6 +96,8 @@ public class GameManager : MonoBehaviour
         {
             // TBD --- PLACE HOLDER
             Debug.Log("GAME OVER");
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayDayEnd();
             //SceneController.GameOver();
         }
     }
@@ -100,6 +106,8 @@ public class GameManager : MonoBehaviour
     {
         if (activeAlertStars == 5)
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayLoseMusic();
             //SceneController.GameOver();
         }
     }
@@ -108,7 +116,11 @@ public class GameManager : MonoBehaviour
     public void AddAlertStar()
     {
         if (activeAlertStars < 5)
+        {
             activeAlertStars++;
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayAlertTone();
+        }
     }
 
     // Removes an alert start to active alert stars

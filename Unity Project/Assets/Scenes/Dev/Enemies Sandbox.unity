@@ -779,6 +779,7 @@ GameObject:
   - component: {fileID: 393934117}
   - component: {fileID: 393934116}
   - component: {fileID: 393934115}
+  - component: {fileID: 393934118}
   m_Layer: 0
   m_Name: AudioController
   m_TagString: Untagged
@@ -910,6 +911,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &393934118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393934114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d59412639ce6bf040b71646786c2d7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayAmbience: {fileID: 8300000, guid: d8f4b1ad88df5814d8d512a9aa31d851, type: 3}
+  dayEnd: {fileID: 8300000, guid: 6d3ecb217b21c0140ae4e4c7bb2c6923, type: 3}
+  winTone: {fileID: 8300000, guid: b50b86dae5e9f6b4faa1cb4ee7098150, type: 3}
+  loseTone: {fileID: 8300000, guid: 18a366e18c1f32048ba2d8ec4c1d1659, type: 3}
+  alertTone: {fileID: 8300000, guid: 516145835d9cfc241a915fe664ba2d48, type: 3}
+  musicVolume: 0.5
+  fadeDuration: 1.5
 --- !u!1 &410360009
 GameObject:
   m_ObjectHideFlags: 0

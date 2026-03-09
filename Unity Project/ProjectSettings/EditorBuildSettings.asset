@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Dev/Enemies Sandbox.unity
-    guid: 41cf097affec46548935f05752261435
+    path: Assets/Scenes/BuildScenes/StartScene.unity
+    guid: 3bff407a0de79d44b8422363d2d1f11d
+  - enabled: 1
+    path: Assets/Scenes/BuildScenes/Gameplay.unity
+    guid: a39ba297928f13945a105f91f8cc8a2e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: dc2f4651398e52f44898b261fd6d4437, type: 3}

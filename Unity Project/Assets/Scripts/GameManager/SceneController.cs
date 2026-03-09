@@ -32,9 +32,9 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
-    public void GoToStart()
+    public void GoToGameplay()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("Gameplay");
         
     }
 }

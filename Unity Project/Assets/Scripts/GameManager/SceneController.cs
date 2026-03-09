@@ -37,4 +37,9 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene("Gameplay");
         
     }
+
+    public void GoToStartMenu()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
 }

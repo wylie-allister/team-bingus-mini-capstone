@@ -88,7 +88,6 @@ public class StartScene : MonoBehaviour
                 //Debug.Log("QUIT");
                 Application.Quit();
                 break;
-                
         }
     }
 

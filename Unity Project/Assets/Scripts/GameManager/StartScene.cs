@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -23,6 +24,18 @@ public class StartScene : MonoBehaviour
     private List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
 
     private bool canNavigate = true;
+
+    public Color selectedColor;
+    public Color deselectedColor;
+
+    public Animator canvasAnimator;
+    private float canvasAnimationTimer = 0.0f;
+
+    public Image blackOverlay;
+    private Color transparentBlackColor = new Color(0, 0, 0, 0);
+    public float overlayTime = 3.0f;
+
+    private float sceneTimer = 0.0f;
     
     void Start()
     {
@@ -33,11 +46,29 @@ public class StartScene : MonoBehaviour
 
     void Update()
     {
+        if (sceneTimer < 0.9f)
+        {
+            sceneTimer += Time.deltaTime;
+            return;
+        }
+        
+        if (blackOverlay.color.a != 0)
+            blackOverlay.color = Color.Lerp(blackOverlay.color, transparentBlackColor, overlayTime * Time.deltaTime);
+        
         // Get input, handle selection and text
         float vertInput = moveAction.action.ReadValue<Vector2>().y;
         HandleNavigation(vertInput);
         HandleSelection();
         HandleText();
+
+        if (canvasAnimator.GetBool("StartAnimation"))
+        {
+            canvasAnimationTimer += Time.deltaTime;
+            if (canvasAnimationTimer >= 1.72f)
+            {
+                SceneController.Instance.GoToGameplay();
+            }
+        }
     }
     
     // We use a bool (canNavigate) to ensure we dont move every frame
@@ -77,7 +108,9 @@ public class StartScene : MonoBehaviour
             // Start selection
             case 0:
                 //Debug.Log("GOTO GAMEPLAY SCENE");
-                SceneController.Instance.GoToGameplay();
+                canvasAnimator.SetBool("StartAnimation", true);
+
+                //SceneController.Instance.GoToGameplay();
                 break;
             // Options selection
             case 1:
@@ -99,6 +132,7 @@ public class StartScene : MonoBehaviour
             // If we are on the currently selected text, increase fontsize
             if (currentTextIndex == selectionIndex)
             {
+                texts[currentTextIndex].color = selectedColor;
                 texts[currentTextIndex].fontSize = selectedFontSize;
                 continue;
             }
@@ -106,6 +140,7 @@ public class StartScene : MonoBehaviour
             // If we are not on the currently selected text, decrease fontsize
             if (texts[currentTextIndex].fontSize != deselectedFontSize)
             {
+                texts[currentTextIndex].color = deselectedColor;
                 texts[currentTextIndex].fontSize = deselectedFontSize;
             }
         }

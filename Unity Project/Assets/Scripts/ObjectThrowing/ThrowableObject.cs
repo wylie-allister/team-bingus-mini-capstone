@@ -27,6 +27,7 @@ public class ThrowableObject : MonoBehaviour
 
     public void Update()
     {
+        
         if (hasBeenThrown)
         {
             thrownTimer += Time.deltaTime;
@@ -54,5 +55,7 @@ public class ThrowableObject : MonoBehaviour
         meshCollider.enabled = true;
         rb.isKinematic = false;
     }
+    
+    
 
 }

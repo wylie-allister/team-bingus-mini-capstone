@@ -6,17 +6,20 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    public static UIController Instance;
+    
     [Header("Throw Element")]
     public bool throwSliderEnabled = true;
     public Slider throwSlider;
     public GameObject canIconObject;
+    public GameObject pineconeIconObject;
     
     [Header("Game Time Element")]
     public Slider gameTimeSlider;
 
     [Header("Tree Count Element")] 
     public TextMeshProUGUI treeCountText;
-    private int treeCount = 0;
+    public int treeCount = 0;
 
     [Header("Roar Element")] 
     public Slider roarSlider;
@@ -26,8 +29,18 @@ public class UIController : MonoBehaviour
 
     [Header("Alert Element")] 
     public GameObject alertStarHolder;
-    
-    
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     void Update()
     {
@@ -65,10 +78,17 @@ public class UIController : MonoBehaviour
         if (GameManager.Instance.itemController.currentThrowable == null)
         {
             canIconObject.SetActive(false);
+            pineconeIconObject.SetActive(false);
         }
-        else
+        else if (GameManager.Instance.itemController.currentThrowable.data.tag == ThrowableObjectTag.CAN)
         {
             canIconObject.SetActive(true);
+            pineconeIconObject.SetActive(false);
+        }
+        else if (GameManager.Instance.itemController.currentThrowable.data.tag == ThrowableObjectTag.PINECONE)
+        {
+            pineconeIconObject.SetActive(true);
+            canIconObject.SetActive(false);
         }
         
     }

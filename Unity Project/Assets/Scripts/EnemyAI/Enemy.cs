@@ -9,19 +9,26 @@ public class Enemy : MonoBehaviour
     private Vector3 spawnPoint;
     private Vector3 guardPoint;
     public Vector3 finalDistractionPoint;
-    private GameObject playerObject;
 
     private bool isIdle = false;
     public Vector3 distractionSourcePosition;
 
     public bool isDistracted = false;
+    public bool shouldTriggerHuh = false;
     private bool obtainNewDistractPoint = true;
 
     public GameObject exclaimMarkerObject;
+    public GameObject questionMarkerObject;
 
     private bool hasSpottedSas = false;
     private float sasSpotTimer = 0.0f;
-    private float sasSpotTimerMax = 2.0f;
+    private float sasSpotTimerMax = 1f;
+    public bool shouldRunAway = false;
+
+    private GameObject lastThrowable = null;
+    private bool startDistractTimer = false;
+    private float distractionTimer = 0.0f;
+    public float distractTimeDelay = 1.10f;
 
     void Start()
     {
@@ -37,15 +44,16 @@ public class Enemy : MonoBehaviour
         // Set nav agent destination to guardpoint
         agent.SetDestination(guardPoint);
         exclaimMarkerObject.SetActive(false);
+        questionMarkerObject.SetActive(false);
 
-        playerObject = GameManager.Instance.player;
 
     }
 
     
     void Update()
     {
-        exclaimMarkerObject.SetActive(isDistracted);
+        exclaimMarkerObject.SetActive(hasSpottedSas);
+        questionMarkerObject.SetActive(isDistracted);
         
         RaycastHit hit;
         
@@ -57,7 +65,8 @@ public class Enemy : MonoBehaviour
                 guardPoint += new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
             }
         }
-
+        
+        HandleDistractTimer();
         HandleGuarding();
         HandleDistraction();
         HandleVision();
@@ -101,12 +110,10 @@ public class Enemy : MonoBehaviour
         // If timer is greater than timer max, stop spotting sas
         if (sasSpotTimer >= sasSpotTimerMax)
         {
+            GameManager.Instance.AddAlertStar();
+            shouldTriggerHuh = true;
             hasSpottedSas = false;
-            return;
         }
-        
-        
-
     }
     
     void HandleDistraction()
@@ -122,7 +129,7 @@ public class Enemy : MonoBehaviour
         if (distractionSourcePosition != null && agent.destination != finalDistractionPoint && obtainNewDistractPoint)
         {
             // Get direction between where the distraction source is from, normalize, scale, and apply transform
-            finalDistractionPoint =  GetDirectionXZ(distractionSourcePosition, true);
+            finalDistractionPoint =  GetDirectionXZ(distractionSourcePosition, shouldRunAway);
             finalDistractionPoint = Vector3.Normalize(finalDistractionPoint) * 15 ;
             finalDistractionPoint += this.transform.position;
             
@@ -191,6 +198,25 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void HandleDistractTimer()
+    {
+        if (startDistractTimer)
+        {
+            distractionTimer += Time.deltaTime;
+
+            if (distractionTimer >= distractTimeDelay)
+            {
+                shouldRunAway = true;
+                shouldRunAway = false;
+                distractionSourcePosition = lastThrowable.gameObject.transform.position;
+                shouldTriggerHuh = true;
+                isDistracted = true;
+                distractionTimer = 0.0f;
+                startDistractTimer = false;
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider collision)
     {
         // If enemy collides with a distraction point
@@ -199,8 +225,8 @@ public class Enemy : MonoBehaviour
             // If object is throwable, set to distracted
             if (collision.transform.GetComponentInParent<ThrowableObject>().hasBeenThrown)
             {
-                distractionSourcePosition = collision.gameObject.transform.position;
-                isDistracted = true;
+                lastThrowable = collision.gameObject;
+                startDistractTimer = true;
             }
         }
 
@@ -208,7 +234,9 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("RoarCollider"))
         {
             // Move away from player
+            shouldRunAway = true;
             distractionSourcePosition = collision.gameObject.transform.position;
+            shouldTriggerHuh = true;
             isDistracted = true;
         }
     }

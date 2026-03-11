@@ -38,7 +38,7 @@ public class SplashController : MonoBehaviour
         }
         else if (overlayTimer > introTime + stayTime  && overlayTimer < introTime + stayTime + exitTime)
         {
-            blackOverlay.color = Color.Lerp(blackOverlay.color, Color.black, Time.deltaTime * transitionScalar);
+            blackOverlay.color = Color.Lerp(blackOverlay.color, Color.black, Time.deltaTime * 2f * transitionScalar);
         }
 
         if (overlayTimer > introTime + stayTime + exitTime)

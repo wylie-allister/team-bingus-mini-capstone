@@ -8,6 +8,9 @@ TagManager:
   - Throwable
   - DistractionPoint
   - RoarCollider
+  - Tree
+  - Camp
+  - Mark
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - UI
   - Throwable
   - Player
-  - 
+  - Terrain
   - 
   - 
   - 

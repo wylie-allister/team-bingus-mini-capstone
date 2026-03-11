@@ -21,6 +21,8 @@ public class ItemController : MonoBehaviour
 
     [Header("Audio")] 
     public AudioClip throwSound;
+
+    public AudioClip sasScratch;
     
     public bool isThrowing
     {
@@ -99,7 +101,7 @@ public class ItemController : MonoBehaviour
         isThrowing = false;
         
         if (AudioController.Instance != null)
-            AudioController.Instance.PlaySoundClip(throwSound, 0.5f);
+            AudioController.Instance.PlaySoundClip(throwSound, 0.5f, 1);
     }
 
     void ChargeThrow()
@@ -123,6 +125,21 @@ public class ItemController : MonoBehaviour
         if (other.gameObject.CompareTag("Throwable"))
         {
             CheckPickup(other.gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Mark"))
+        {
+            CheckMark(other.gameObject);
+        }
+    }
+
+    private void CheckMark(GameObject mark)
+    {
+        if (m_interactAction.WasPressedThisFrame())
+        {
+            UIController.Instance.IncreaseTreeCount();
+            AudioController.Instance.PlaySoundClip(sasScratch, 1.0f);
+            Destroy(mark);
         }
     }
 

@@ -34,6 +34,7 @@ public class SceneController : MonoBehaviour
 
     public void GoToGameplay()
     {
+        
         SceneManager.LoadScene("Gameplay");
         
     }
@@ -41,5 +42,13 @@ public class SceneController : MonoBehaviour
     public void GoToStartMenu()
     {
         SceneManager.LoadScene("StartScene");
+    }
+
+    public void GoToGameOver()
+    {
+        Debug.Log("Game Over");
+        PlayerPrefs.SetInt("TreesSaved", UIController.Instance.treeCount);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("GameOver");
     }
 }

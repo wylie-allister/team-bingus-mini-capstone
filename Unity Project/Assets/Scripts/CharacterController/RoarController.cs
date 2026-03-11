@@ -69,7 +69,7 @@ public class RoarController : MonoBehaviour
             // TBD -------- 
             if (AudioController.Instance != null)
             {
-                AudioController.Instance.PlaySoundClip(roarSound, 0.6f);
+                AudioController.Instance.PlaySoundClip(roarSound, 0.6f, 1);
             }
             
             isColliderEnabled = true;

@@ -39,18 +39,8 @@ public class TerrainGenerator : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        /*/ TBD - DEBUG
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            for (int i = 0; i < numberOfTrees; i++)
-            {
-                RandomizeTreePosition(trees[i]);
-            }
-        }
-        */
     }
 
     public void HandleTreeRandomization()
@@ -61,6 +51,7 @@ public class TerrainGenerator : MonoBehaviour
             GameObject newTree = Instantiate(treePrefabs[Random.Range(0, treePrefabs.Length)]);
 
             RandomizeTreePosition(newTree);
+            newTree.transform.localScale = new Vector3(1, 1, 1) * Random.Range(0.8f, 1.2f);
             newTree.transform.parent = treeParent;
             trees.Add(newTree);
         }
@@ -69,7 +60,12 @@ public class TerrainGenerator : MonoBehaviour
     public void RandomizeTreePosition(GameObject tree)
     {
         // Get new random position within the spawn radius
-        Vector3 randomPosition = new Vector3(Random.Range(-treeSpawnRadius.x, treeSpawnRadius.x), 0, Random.Range(-treeSpawnRadius.y, treeSpawnRadius.y));
+        Vector3 randomPosition = new Vector3(Random.Range(-treeSpawnRadius.x, treeSpawnRadius.x), 3, Random.Range(-treeSpawnRadius.y, treeSpawnRadius.y));
+        RaycastHit hit;
+        if (Physics.Raycast(randomPosition, Vector3.down, out hit, 5f, LayerMask.GetMask("Ground")))
+        {
+            randomPosition.y = hit.point.y - 0.5f;
+        }
         
         // Set tree position to new random position
         tree.transform.position = randomPosition;

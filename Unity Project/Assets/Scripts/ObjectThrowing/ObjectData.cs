@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum ThrowableObjectTag { UNTAGGED, ROCK, STICK, CAN, }
+public enum ThrowableObjectTag { UNTAGGED, ROCK, STICK, CAN, PINECONE, }
 
 [Serializable]
 public struct ObjectData
@@ -9,7 +9,4 @@ public struct ObjectData
     // Tag for item delineation
     public ThrowableObjectTag tag;
     
-    // Stretch goal
-    public float objectWeight;
-    public float soundRadius;
 }

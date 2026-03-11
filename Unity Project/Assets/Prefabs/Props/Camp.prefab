@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1835181321005151955}
   - component: {fileID: 2713755951176915748}
+  - component: {fileID: 1469018621670053026}
   m_Layer: 0
   m_Name: Camp
-  m_TagString: Untagged
+  m_TagString: Camp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b78c7360ad5f4540bb2be8aa4f20339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _markedTreePrefab: {fileID: 1231143827019894038, guid: 687c01d89f7951248b021bb057682d05, type: 3}
+  _markedTreePrefab: {fileID: 346334049356080715, guid: 80d1c92c27ce9544cb4c5b49f821a14e, type: 3}
   _loggingTruckPrefab: {fileID: 9203945236095473122, guid: 2085cf298433e0b4aa063faba6cdc6d5, type: 3}
   _enemyPrefab: {fileID: 1548126887056500522, guid: 60e84b662a80deb4a927da4187a87ce1, type: 3}
   _campEnemyCount: 4
@@ -54,6 +55,27 @@ MonoBehaviour:
   _enemySpawnRadius: 10
   _markedTreePositionOffset: {x: 2.59, y: 0, z: 3.88}
   _loggingTruckPositionOffset: {x: -1.9, y: 0, z: -5.93}
+--- !u!135 &1469018621670053026
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346407509852699545}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 25.820633
+  m_Center: {x: 1.331089, y: 0, z: 5.3191566}
 --- !u!1001 &2247132343384811927
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class AudioController : MonoBehaviour
     public static AudioController Instance;
 
     private AudioSource audioSource;
+    public AudioSource clipSource;
     public AudioClip ambience;
 
     void Awake()
@@ -32,20 +33,31 @@ public class AudioController : MonoBehaviour
     {
         if (audioSource.clip != null)
         {
-            audioSource.Play();
+            clipSource.Play();
         }
     }
 
     public void StopSound()
     {
-        audioSource.Stop();
+        clipSource.Stop();
     }
 
-    public void PlaySoundClip(AudioClip clip, float volume = 0.5f)
+    public void PlaySoundClip(AudioClip clip, float volume = 0.5f, int sourceIndex = 0)
     {
-        if (clip != null)
+        if (sourceIndex == 0)
         {
-            audioSource.PlayOneShot(clip, volume);
+            if (clip != null && !clipSource.isPlaying)
+            {
+                clipSource.PlayOneShot(clip, volume);
+            }
+        }
+
+        else if (sourceIndex == 1)
+        {
+            if (clip != null)
+            {
+                clipSource.PlayOneShot(clip, volume);
+            }
         }
     }
 }

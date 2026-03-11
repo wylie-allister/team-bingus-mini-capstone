@@ -201,6 +201,11 @@ public class GameManager : MonoBehaviour
 
         if (endGameAnimationTimer >= 1.7f)
         {
+            if (activeAlertStars == 5)
+            {
+                DEBUG.Instance.didPlayerLose = true;
+            }
+            
             SceneController.Instance.GoToGameOver();
         }
     }

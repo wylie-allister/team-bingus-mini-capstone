@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class DEBUG : MonoBehaviour
 {
     public static DEBUG Instance;
+    public bool didPlayerLose = false;
     
     public InputActionReference roarAction;
     public InputActionReference jumpAction;
@@ -48,20 +49,30 @@ public class DEBUG : MonoBehaviour
     void Update()
     {
 
+        if (UIController.Instance != null)
+        {
+            UIController.Instance.pausePanel.SetActive(isGamePaused);
+            
+            if (pauseAction.action.WasPressedThisFrame())
+            {
+                isGamePaused = !isGamePaused;
+            }
+        }
+        
         if (isGamePaused)
         {
             Time.timeScale = 0f;
         }
         else
         {
+            if (Cursor.lockState != CursorLockMode.Locked)
+                Cursor.lockState = CursorLockMode.Locked;
+            
             Time.timeScale = 1f;
         }
         
         
-        if (pauseAction.action.WasPressedThisFrame())
-        {
-            isGamePaused = !isGamePaused;
-        }
+
         
         
         if (isRoar && isJump && isDebug)

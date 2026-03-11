@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SplashController : MonoBehaviour
 {
+    
     public Image blackOverlay;
 
     private float overlayTimer = 0;
@@ -20,6 +21,8 @@ public class SplashController : MonoBehaviour
     
     void Start()
     {
+        DEBUG.Instance.didPlayerLose = false;
+        
         if (Cursor.lockState != CursorLockMode.Locked)
             Cursor.lockState = CursorLockMode.Locked;
         
@@ -51,6 +54,11 @@ public class SplashController : MonoBehaviour
         }
 
         if (overlayTimer > introTime + stayTime + exitTime + 1.0f)
+        {
+            blackOverlay.color = Color.Lerp(blackOverlay.color, blackNoAlpha, Time.deltaTime * 2f * transitionScalar);
+        }
+
+        if (overlayTimer > introTime + stayTime + exitTime + 2.0f)
         {
             SceneController.Instance.GoToStartMenu();
         }

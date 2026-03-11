@@ -8,7 +8,8 @@ public class GameOverScene : MonoBehaviour
 {
     public InputActionReference jumpAction;
     public InputActionReference roarAction;
-    
+
+    public TextMeshProUGUI treeCountTopText;
     public TextMeshProUGUI treeCountText;
     public TextMeshProUGUI fact1Text;
     public TextMeshProUGUI fact2Text;
@@ -29,17 +30,33 @@ public class GameOverScene : MonoBehaviour
     public Animator canvasAnimator;
     private float canvasAnimationTimer = 0.0f;
     private bool activeAnimationTimer = true;
-    
-    
+
+
+    public GameObject playerLoseText;
     
     // Start is called before the first frame update
     void Start()
     {
+        playerLoseText.SetActive(false);
+        
         currentTextSpeed = factScrollSpeed;
         treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
         
         roarAction.action.started += ctx => slowText = true;
         roarAction.action.canceled += ctx => slowText = false;
+
+        if (DEBUG.Instance.didPlayerLose)
+        {
+            playerLoseText.SetActive(true);
+            treeCountText.gameObject.SetActive(false);
+            treeCountTopText.gameObject.SetActive(false);
+        }
+        else
+        {
+            playerLoseText.SetActive(false);
+            treeCountText.gameObject.SetActive(true);
+            treeCountTopText.gameObject.SetActive(true);
+        }
     }
 
     void Update()

@@ -30,6 +30,9 @@ public class UIController : MonoBehaviour
     [Header("Alert Element")] 
     public GameObject alertStarHolder;
 
+    [Header("Pause Screen")] 
+    public GameObject pausePanel;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -40,6 +43,8 @@ public class UIController : MonoBehaviour
         {
             Instance = this;
         }
+        
+        pausePanel.SetActive(false);
     }
 
     void Update()

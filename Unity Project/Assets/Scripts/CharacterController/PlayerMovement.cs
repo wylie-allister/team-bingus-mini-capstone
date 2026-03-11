@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     // Disable Input Actions Map
     private void OnDisable()
     {
-        InputActions.FindActionMap("Player").Disable();
+        //InputActions.FindActionMap("Player").Disable();
     }
 
     // Get reference to move action and rigidbody on script awake

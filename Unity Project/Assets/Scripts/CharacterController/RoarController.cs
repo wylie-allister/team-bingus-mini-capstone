@@ -33,7 +33,7 @@ public class RoarController : MonoBehaviour
     private void OnDisable()
     {
         // Disable input map
-        InputActions.FindActionMap("Player").Disable();
+        //InputActions.FindActionMap("Player").Disable();
     }
 
     private void Awake()

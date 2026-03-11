@@ -24,7 +24,7 @@ public class PlayerCamera : MonoBehaviour
         // Disable Input Actions Map
         private void OnDisable()
         {
-                InputActions.FindActionMap("Player").Disable();
+                //InputActions.FindActionMap("Player").Disable();
         }
 
         // Get reference to look action on script awake

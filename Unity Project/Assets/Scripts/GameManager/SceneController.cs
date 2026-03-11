@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour
     
     private int currentSceneIndex = 0;
 
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -50,5 +51,10 @@ public class SceneController : MonoBehaviour
         PlayerPrefs.SetInt("TreesSaved", UIController.Instance.treeCount);
         PlayerPrefs.Save();
         SceneManager.LoadScene("GameOver");
+    }
+
+    public void GoToSplash()
+    {
+        SceneManager.LoadScene("Splash");
     }
 }

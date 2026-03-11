@@ -47,6 +47,9 @@ public class GameManager : MonoBehaviour
 
     public Animator canvasAnimator;
     private float canvasAnimationTimer = 0.0f;
+    private bool activeAnimationTimer = true;
+    
+    public bool gameOver = false;
 
     
     // Create singleton instance for this object
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
         }
         
         PlayerPrefs.SetInt("TreesSaved", 0);
@@ -114,11 +117,19 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if (canvasAnimationTimer < 0.9f)
+        if (canvasAnimationTimer >= 1.0f)
+        {
+            canvasAnimator.SetBool("StartAnimation", true);
+            activeAnimationTimer = false;
+            canvasAnimationTimer = 0.0f;
+        }
+        
+        if (activeAnimationTimer)
         {
             canvasAnimationTimer += Time.deltaTime;
             return;
         }
+        
         
         HandleGameTimer();
         HandleAlertMechanic();
@@ -128,6 +139,10 @@ public class GameManager : MonoBehaviour
 
     void UpdateClouds()
     {
+        if (gameOver)
+        {
+            return;
+        }
         foreach (GameObject cloud in clouds)
         {
             if (cloud.transform.position.x > 1000)
@@ -148,6 +163,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            gameOver = true;
             SceneController.Instance.GoToGameOver();
             
         }

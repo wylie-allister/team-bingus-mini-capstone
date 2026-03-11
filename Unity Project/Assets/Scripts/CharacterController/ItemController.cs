@@ -39,7 +39,7 @@ public class ItemController : MonoBehaviour
     // Disable Input Actions Map
     private void OnDisable()
     {
-        InputActions.FindActionMap("Player").Disable();
+        //InputActions.FindActionMap("Player").Disable();
     }
 
     // Get reference to throw action on script awake

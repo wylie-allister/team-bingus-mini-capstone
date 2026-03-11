@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-
+    
     [Header("Player References")]
     public GameObject player;
     public ItemController itemController;
@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
     public Animator canvasAnimator;
     private float canvasAnimationTimer = 0.0f;
     private bool activeAnimationTimer = true;
+    private float endGameAnimationTimer = 0.0f;
+    private bool activeEndGameTimer = false;
     
     public bool gameOver = false;
 
@@ -135,6 +137,8 @@ public class GameManager : MonoBehaviour
         HandleAlertMechanic();
 
         UpdateClouds();
+
+        HandleEndGame();
     }
 
     void UpdateClouds()
@@ -164,8 +168,8 @@ public class GameManager : MonoBehaviour
         else
         {
             gameOver = true;
-            SceneController.Instance.GoToGameOver();
-            
+            activeEndGameTimer = true;
+
         }
     }
 
@@ -183,10 +187,24 @@ public class GameManager : MonoBehaviour
         
         if (activeAlertStars == 5)
         {
-            SceneController.Instance.GoToGameOver();
+            activeEndGameTimer = true;
         }
     }
 
+    public void HandleEndGame()
+    {
+        if (activeEndGameTimer)
+        {
+            endGameAnimationTimer += Time.deltaTime;
+            canvasAnimator.SetBool("EndScene", true);
+        }
+
+        if (endGameAnimationTimer >= 1.7f)
+        {
+            SceneController.Instance.GoToGameOver();
+        }
+    }
+    
     // Adds an alert start to active alert stars
     public void AddAlertStar()
     {

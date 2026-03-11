@@ -11,10 +11,13 @@ public class DEBUG : MonoBehaviour
     public InputActionReference roarAction;
     public InputActionReference jumpAction;
     public InputActionReference debugAction;
+    public InputActionReference pauseAction;
 
     private bool isRoar = false;
     private bool isJump = false;
     private bool isDebug = false;
+
+    private bool isGamePaused = false;
 
 
     void Awake()
@@ -44,6 +47,23 @@ public class DEBUG : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (isGamePaused)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+        
+        
+        if (pauseAction.action.WasPressedThisFrame())
+        {
+            isGamePaused = !isGamePaused;
+        }
+        
+        
         if (isRoar && isJump && isDebug)
         {
             SceneManager.LoadScene("Splash");

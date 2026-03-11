@@ -20,6 +20,9 @@ public class SplashController : MonoBehaviour
     
     void Start()
     {
+        if (Cursor.lockState != CursorLockMode.Locked)
+            Cursor.lockState = CursorLockMode.Locked;
+        
         overlayTimer = 0;
         blackOverlay.color = Color.black;
     }

@@ -26,6 +26,11 @@ public class PlayerMovement : MonoBehaviour
     public float maxStamina = 30.0f;
     public float sprintStaminaTax = 7.5f;
     public float sprintRegenRate = 5.0f;
+
+    public AudioClip pantSound;
+    private bool isPanting = false;
+    public AudioClip walkSound;
+    public AudioClip runSound;
     
 
     private bool isGrounded;
@@ -63,7 +68,10 @@ public class PlayerMovement : MonoBehaviour
     {
         // Read and store value of movement input action
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
-
+        if (m_moveAmt == Vector2.zero)
+        {
+            this.m_rb.angularVelocity = Vector3.zero;
+        }
         // Check for ground collision -- Usually required for jump mechanics, we may or may not use this -bc
         isGrounded = GroundCheck();
     }
@@ -88,6 +96,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleSprint()
     {
+        if (!canSprint && isPanting)
+        {
+            AudioController.Instance.PlaySoundClip(pantSound, 0.2f, 1);
+            isPanting = false;
+        }
+        
         if (!isSprinting)
         {
             if (currentStamina < maxStamina)
@@ -102,11 +116,6 @@ public class PlayerMovement : MonoBehaviour
             
         }
         
-        if (currentStamina <= 0.0f)
-        {
-            canSprint = false;
-        }
-        
         if (isSprinting && canSprint)
         {
             currentStamina -= sprintStaminaTax * Time.deltaTime;
@@ -115,6 +124,12 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             currentSpeed = walkSpeed;
+        }
+        
+        if (currentStamina <= 0.0f && canSprint)
+        {
+            isPanting = true;
+            canSprint = false;
         }
     }
     
@@ -125,7 +140,6 @@ public class PlayerMovement : MonoBehaviour
         
         // Clamp backwards movement for slower backwards speed, adjust as necessary -bc
         float v = Mathf.Clamp(m_moveAmt.y, -0.5f, 1.0f);
-        
         
         
         Vector3 movement = cam.transform.right * h * strafeSpeed + cam.transform.forward * v * currentSpeed;

@@ -42,8 +42,16 @@ public class AudioController : MonoBehaviour
         clipSource.Stop();
     }
 
-    public void PlaySoundClip(AudioClip clip, float volume = 0.5f, int sourceIndex = 0)
+    public void PlaySoundClip(AudioClip clip, float volume = 0.5f, int sourceIndex = 0, AudioSource customSource = null)
     {
+        if (customSource != null)
+        {
+            if (clip != null)
+            {
+                customSource.PlayOneShot(clip, volume);
+            }
+        }
+        
         if (sourceIndex == 0)
         {
             if (clip != null && !clipSource.isPlaying)
@@ -56,7 +64,7 @@ public class AudioController : MonoBehaviour
         {
             if (clip != null)
             {
-                clipSource.PlayOneShot(clip, volume);
+                audioSource.PlayOneShot(clip, volume);
             }
         }
     }

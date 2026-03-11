@@ -17,11 +17,14 @@ public class EnemyAudio : MonoBehaviour
 
     private bool isDistracted = false;
     private bool triggerHuh = false;
+    
 
+    private AudioSource audioSource;
     void Awake()
     {
         // Get parent enemy script
         enemyBrain = this.GetComponentInParent<Enemy>();
+        audioSource = this.GetComponent<AudioSource>();
     }
     
     // Set babble timer to random value up to set max
@@ -57,22 +60,32 @@ public class EnemyAudio : MonoBehaviour
     // Play random huh sound
     public void PlayHuh()
     {
+        if (AudioController.Instance == null)
+        {
+            return;
+        }
+        
         if (enemyBrain.shouldRunAway)
         {
             // 70% chance of playing the "What was that?" sound
             if (Random.Range(0, 10) <= 7)
-                AudioController.Instance.PlaySoundClip(wwtSound);
+                AudioController.Instance.PlaySoundClip(wwtSound, 0.3f, 0, audioSource);
             else
-                AudioController.Instance.PlaySoundClip(scaredHuhSound);
+                AudioController.Instance.PlaySoundClip(scaredHuhSound, 0.3f, 0, audioSource);
         }
         else
         {
-            AudioController.Instance.PlaySoundClip(huhSounds[Random.Range(0, huhSounds.Length)]);
+            AudioController.Instance.PlaySoundClip(huhSounds[Random.Range(0, huhSounds.Length)], 0.3f, 0, audioSource);
         }
     }
     
     private void TryBabble()
     {
+        if (AudioController.Instance == null)
+        {
+            return;
+        }
+        
         // If enemy is not distracted, try babble
         if (enemyBrain.isDistracted)
         {
@@ -81,7 +94,7 @@ public class EnemyAudio : MonoBehaviour
         
         if (Random.Range(0, 100) < chanceOfBabble)
         {
-            AudioController.Instance.PlaySoundClip(babbleSounds[Random.Range(0, babbleSounds.Length)], 1);
+            AudioController.Instance.PlaySoundClip(babbleSounds[Random.Range(0, babbleSounds.Length)], 0.3f, 0, audioSource);
         }
     }
 }

@@ -23,6 +23,7 @@ public class ItemController : MonoBehaviour
     public AudioClip throwSound;
 
     public AudioClip sasScratch;
+    public AudioClip itemPickupSound;
     
     public bool isThrowing
     {
@@ -165,6 +166,7 @@ public class ItemController : MonoBehaviour
             // Set position to throwholder position
             // Disable visable rendering of the mesh
             // Set parent to throwholder
+            AudioController.Instance.PlaySoundClip(itemPickupSound, 0.3f, 1);
             currentThrowable = item.transform.parent.GetComponent<ThrowableObject>();
             currentThrowable.transform.position = throwHolder.transform.position;
             currentThrowable.DisableMesh();

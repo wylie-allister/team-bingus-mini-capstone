@@ -8,24 +8,30 @@ public class GameOverScene : MonoBehaviour
     public InputActionReference jumpAction;
     public InputActionReference roarAction;
 
-    [Header("Win Screen")]
-    public GameObject winScreen;
-    public TextMeshProUGUI winHeaderText;
+    // --- Existing fields (already wired up in the scene) ---
+    [Header("Tree Count (Win)")]
     public TextMeshProUGUI treeCountTopText;
     public TextMeshProUGUI treeCountText;
 
-    [Header("Lose Screen")]
-    public GameObject loseScreen;
-    public TextMeshProUGUI loseHeaderText;
-    public TextMeshProUGUI loseReasonText;
+    [Header("Lose Panel")]
+    // The existing lose panel GameObject already set up in the scene
+    public GameObject playerLoseText;
 
-    [Header("Shared - Scrolling Facts")]
+    [Header("Scrolling Facts")]
     public TextMeshProUGUI fact1Text;
     public TextMeshProUGUI fact2Text;
     public string[] wwfFacts;
     public float factScrollSpeed = 10;
 
     public Animator canvasAnimator;
+
+    // --- New optional fields - assign in editor to get explicit messaging ---
+    // If left empty, the screen falls back to the original look
+    [Header("Explicit End Messaging (optional)")]
+    // A TextMeshPro inside playerLoseText to show why the player lost
+    public TextMeshProUGUI loseReasonText;
+    // A TextMeshPro shown on the win screen to say what happened
+    public TextMeshProUGUI winHeaderText;
 
     private bool slowText = false;
     private float currentTextSpeed;
@@ -41,38 +47,43 @@ public class GameOverScene : MonoBehaviour
 
     void Start()
     {
+        playerLoseText.SetActive(false);
         currentTextSpeed = factScrollSpeed;
 
-        // Hold roar to slow the scrolling facts
         roarAction.action.started += ctx => slowText = true;
         roarAction.action.canceled += ctx => slowText = false;
 
-        bool didLose = GameState.Instance.didPlayerLose;
-        string reason = GameState.Instance.endReason;
+        treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
 
-        if (didLose)
+        if (GameState.Instance.didPlayerLose)
         {
-            // Show lose screen, hide win screen
-            loseScreen.SetActive(true);
-            winScreen.SetActive(false);
+            // Show the lose panel - same as before
+            playerLoseText.SetActive(true);
+            treeCountText.gameObject.SetActive(false);
+            treeCountTopText.gameObject.SetActive(false);
 
-            loseHeaderText.text = "CAUGHT!";
-            loseReasonText.text = reason != "" ? reason : "You were spotted too many times!";
+            // If an explicit reason text is wired up, fill it in
+            if (loseReasonText != null)
+            {
+                string reason = GameState.Instance.endReason;
+                loseReasonText.text = reason != "" ? reason : "You were spotted too many times!";
+            }
         }
         else
         {
-            // Show win screen, hide lose screen
-            winScreen.SetActive(true);
-            loseScreen.SetActive(false);
+            // Win state - show tree count, hide lose panel
+            playerLoseText.SetActive(false);
+            treeCountText.gameObject.SetActive(true);
+            treeCountTopText.gameObject.SetActive(true);
 
-            winHeaderText.text = "THE CREW FLED!";
-            treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
+            // If an explicit win header is wired up, fill it in
+            if (winHeaderText != null)
+                winHeaderText.text = "THE CREW FLED!";
         }
     }
 
     void Update()
     {
-        // Press Jump/Confirm to return to splash
         if (jumpAction.action.WasPressedThisFrame())
         {
             SceneController.Instance.GoToSplash();

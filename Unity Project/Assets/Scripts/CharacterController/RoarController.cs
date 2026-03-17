@@ -14,7 +14,7 @@ public class RoarController : MonoBehaviour
     private bool hasAttemptedRoar = false;
     private bool isColliderEnabled = false;
     public float roarCharge = 0.0f;
-    public float roarChargeRate = 1.0f;
+    public float roarChargeRate = 3.0f;  // charges in ~10s instead of 30s
     public float roarMaxCharge = 30.0f;
     private float roarRange = 10.0f;
     public GameObject roarCollider;
@@ -88,7 +88,7 @@ public class RoarController : MonoBehaviour
         {
             roarColliderTimer += Time.deltaTime;
 
-            if (roarColliderTimer >= 0.5f)
+            if (roarColliderTimer >= 0.8f)
             {
                 isColliderEnabled = false;
                 roarColliderTimer = 0.0f;

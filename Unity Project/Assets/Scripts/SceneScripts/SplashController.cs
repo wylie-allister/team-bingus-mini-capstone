@@ -21,7 +21,8 @@ public class SplashController : MonoBehaviour
     
     void Start()
     {
-        DEBUG.Instance.didPlayerLose = false;
+        GameState.Instance.didPlayerLose = false;
+        GameState.Instance.endReason = "";
         
         if (Cursor.lockState != CursorLockMode.Locked)
             Cursor.lockState = CursorLockMode.Locked;

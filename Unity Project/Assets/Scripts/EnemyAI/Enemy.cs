@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TestTools; // Required for NavMesh classes
 
 public class Enemy : MonoBehaviour
 {
@@ -22,13 +21,23 @@ public class Enemy : MonoBehaviour
 
     private bool hasSpottedSas = false;
     private float sasSpotTimer = 0.0f;
-    private float sasSpotTimerMax = 1f;
+    private float sasSpotTimerMax = 1.5f;   // bumped from 1s so player has a bit more time to duck out
     public bool shouldRunAway = false;
 
     private GameObject lastThrowable = null;
     private bool startDistractTimer = false;
     private float distractionTimer = 0.0f;
-    public float distractTimeDelay = 1.10f;
+    public float distractTimeDelay = 0.8f;  // lowered from 1.1s for snappier enemy reaction to throws
+
+    // How long the exclaim/question markers stay visible after the trigger clears
+    private float exclaimLingerTimer = 0.0f;
+    private float questionLingerTimer = 0.0f;
+    private const float markerLingerTime = 1.2f;
+
+    // Stuck detection - if agent stops mid-patrol, nudge it back on track
+    private float stuckTimer = 0.0f;
+    private const float stuckTimeLimit = 3.0f;
+    private Vector3 lastPosition;
 
     void Start()
     {
@@ -36,40 +45,50 @@ public class Enemy : MonoBehaviour
         // Set spawnpoint to current position
         agent = GetComponent<NavMeshAgent>();
         spawnPoint = transform.position;
-        
-        // Defaultly set spawn point to a random area
-        guardPoint = spawnPoint;
-        guardPoint += new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
-        
+        lastPosition = spawnPoint;
+
+        // Set guard point to a random area near spawn
+        guardPoint = GetNewGuardPoint();
+
         // Set nav agent destination to guardpoint
         agent.SetDestination(guardPoint);
         exclaimMarkerObject.SetActive(false);
         questionMarkerObject.SetActive(false);
-
-
     }
 
-    
     void Update()
     {
-        exclaimMarkerObject.SetActive(hasSpottedSas);
-        questionMarkerObject.SetActive(isDistracted);
-        
-        RaycastHit hit;
-        
-        // Cast ray from base of object upwards, if an item/collider/object/model is present, move guardpoint
-        if (Physics.SphereCast(guardPoint, 2.0f, Vector3.up, out hit, 3.0f))
-        {
-            if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground"))
-            {
-                guardPoint += new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
-            }
-        }
-        
+        HandleMarkerDisplay();
         HandleDistractTimer();
         HandleGuarding();
         HandleDistraction();
         HandleVision();
+        HandleStuckDetection();
+    }
+
+    // Handles linger timers so markers stay visible briefly after the trigger clears
+    void HandleMarkerDisplay()
+    {
+        if (hasSpottedSas)
+        {
+            exclaimLingerTimer = markerLingerTime;
+        }
+        else if (exclaimLingerTimer > 0.0f)
+        {
+            exclaimLingerTimer -= Time.deltaTime;
+        }
+
+        if (isDistracted)
+        {
+            questionLingerTimer = markerLingerTime;
+        }
+        else if (questionLingerTimer > 0.0f)
+        {
+            questionLingerTimer -= Time.deltaTime;
+        }
+
+        exclaimMarkerObject.SetActive(exclaimLingerTimer > 0.0f);
+        questionMarkerObject.SetActive(questionLingerTimer > 0.0f);
     }
 
     void HandleVision()
@@ -79,17 +98,22 @@ public class Enemy : MonoBehaviour
         Vector3 dir = transform.forward;
         float maxDist = 10.0f;
         RaycastHit hit;
-        
-        // Scene debug ray call to visualize the distance of the enemy vision
+
+        // Uncomment to visualize enemy vision in scene view
         //Debug.DrawRay(origin, dir * maxDist);
 
         if (Physics.Raycast(origin, dir, out hit, maxDist))
         {
             if (hit.transform.gameObject.CompareTag("Player"))
             {
-                Debug.Log("Player Seen!!!");
                 hasSpottedSas = true;
             }
+        }
+        else
+        {
+            // Player left line of sight - only reset if timer hasnt fired yet
+            if (!hasSpottedSas)
+                sasSpotTimer = 0.0f;
         }
 
         HandleSasSpot();
@@ -97,25 +121,23 @@ public class Enemy : MonoBehaviour
 
     void HandleSasSpot()
     {
-		// If the neemy hasnt spotted sas, break from logic and set timer to 0
+        // If the enemy hasn't spotted sas, break from logic
         if (!hasSpottedSas)
-        {
-            sasSpotTimer = 0.0f;
             return;
-        }
-        
+
         // If enemy has spotted sas, run timer
         sasSpotTimer += Time.deltaTime;
-        
-        // If timer is greater than timer max, stop spotting sas
+
+        // If timer is greater than timer max, add alert and stop spotting
         if (sasSpotTimer >= sasSpotTimerMax)
         {
             GameManager.Instance.AddAlertStar();
             shouldTriggerHuh = true;
             hasSpottedSas = false;
+            sasSpotTimer = 0.0f;
         }
     }
-    
+
     void HandleDistraction()
     {
         // If not distracted, break from logic
@@ -124,27 +146,23 @@ public class Enemy : MonoBehaviour
 
         // If distracted, set idle to false
         isIdle = false;
-        
-        // If we need a new distraction point
-        if (distractionSourcePosition != null && agent.destination != finalDistractionPoint && obtainNewDistractPoint)
+
+        // Get a new destination when we first become distracted
+        if (obtainNewDistractPoint)
         {
-            // Get direction between where the distraction source is from, normalize, scale, and apply transform
-            finalDistractionPoint =  GetDirectionXZ(distractionSourcePosition, shouldRunAway);
-            finalDistractionPoint = Vector3.Normalize(finalDistractionPoint) * 15 ;
+            finalDistractionPoint = GetDirectionXZ(distractionSourcePosition, shouldRunAway);
+            finalDistractionPoint = Vector3.Normalize(finalDistractionPoint) * 15;
             finalDistractionPoint += this.transform.position;
-            
-            // Set nav agent destination to new position
+
             agent.SetDestination(finalDistractionPoint);
-            
-            // Prevent update of new distraction point
             obtainNewDistractPoint = false;
         }
 
-        // If we are within a given range of the distraction point
+        // If we are within range of the distraction point, return to spawn
         if (IsAtPointWithinRange(finalDistractionPoint, 2.0f))
         {
-            // Not distracted, can obtain new distraction point, move to spawn
             isDistracted = false;
+            shouldRunAway = false;
             obtainNewDistractPoint = true;
             agent.SetDestination(spawnPoint);
         }
@@ -155,10 +173,8 @@ public class Enemy : MonoBehaviour
     {
         // If idling or distracting, break from logic
         if (isIdle || isDistracted)
-        {
             return;
-        }
-        
+
         // Set navagent dest to guard point if at spawn point
         if (IsAtPointWithinRange(spawnPoint, 1f))
         {
@@ -167,10 +183,51 @@ public class Enemy : MonoBehaviour
         // Set navagent dest to spawn point if at guard point
         else if (IsAtPointWithinRange(guardPoint, 1f))
         {
+            // Pick a new guard point each time we arrive, keeps patrol feeling fresh
+            guardPoint = GetNewGuardPoint();
             agent.SetDestination(spawnPoint);
         }
     }
-    
+
+    // If the enemy hasn't moved in stuckTimeLimit seconds, reset to a new guard point
+    void HandleStuckDetection()
+    {
+        if (isDistracted)
+        {
+            stuckTimer = 0.0f;
+            lastPosition = transform.position;
+            return;
+        }
+
+        if (Vector3.Distance(transform.position, lastPosition) < 0.1f)
+        {
+            stuckTimer += Time.deltaTime;
+            if (stuckTimer >= stuckTimeLimit)
+            {
+                guardPoint = GetNewGuardPoint();
+                agent.SetDestination(guardPoint);
+                stuckTimer = 0.0f;
+            }
+        }
+        else
+        {
+            stuckTimer = 0.0f;
+            lastPosition = transform.position;
+        }
+    }
+
+    // Returns a new guard point near the spawn, checking that it lands on the NavMesh
+    Vector3 GetNewGuardPoint()
+    {
+        Vector3 candidate = spawnPoint + new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
+
+        // Sample the NavMesh to make sure the point is reachable
+        if (NavMesh.SamplePosition(candidate, out NavMeshHit navHit, 5f, NavMesh.AllAreas))
+            return navHit.position;
+
+        return spawnPoint;
+    }
+
     // Return whether a point is within a given range of this object, or not
     bool IsAtPointWithinRange(Vector3 point, float range)
     {
@@ -188,7 +245,7 @@ public class Enemy : MonoBehaviour
     {
         if (swapDir)
         {
-            return new Vector3( this.transform.position.x - point.x, 0,
+            return new Vector3(this.transform.position.x - point.x, 0,
                 this.transform.position.z - point.z);
         }
         else
@@ -200,20 +257,20 @@ public class Enemy : MonoBehaviour
 
     private void HandleDistractTimer()
     {
-        if (startDistractTimer)
-        {
-            distractionTimer += Time.deltaTime;
+        if (!startDistractTimer)
+            return;
 
-            if (distractionTimer >= distractTimeDelay)
-            {
-                shouldRunAway = true;
-                shouldRunAway = false;
-                distractionSourcePosition = lastThrowable.gameObject.transform.position;
-                shouldTriggerHuh = true;
-                isDistracted = true;
-                distractionTimer = 0.0f;
-                startDistractTimer = false;
-            }
+        distractionTimer += Time.deltaTime;
+
+        if (distractionTimer >= distractTimeDelay)
+        {
+            // shouldRunAway stays false for thrown item distractions - enemies investigate, not flee
+            distractionSourcePosition = lastThrowable.gameObject.transform.position;
+            shouldTriggerHuh = true;
+            isDistracted = true;
+            obtainNewDistractPoint = true;
+            distractionTimer = 0.0f;
+            startDistractTimer = false;
         }
     }
 
@@ -230,14 +287,14 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        // If enemy collides with roarcollider
+        // If enemy collides with roar collider - run away from player
         if (collision.gameObject.CompareTag("RoarCollider"))
         {
-            // Move away from player
             shouldRunAway = true;
             distractionSourcePosition = collision.gameObject.transform.position;
             shouldTriggerHuh = true;
             isDistracted = true;
+            obtainNewDistractPoint = true;
         }
     }
 }

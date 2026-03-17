@@ -15,23 +15,27 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movement;
 
     public float walkSpeed = 5.0f;
-    public float sprintSpeed = 9.0f;
+    public float sprintSpeed = 11.0f;   // bumped from 9 for a more satisfying sprint
     private float currentSpeed;
-    public float strafeSpeed = 4.0f;
+    public float strafeSpeed = 4.5f;    // bumped slightly from 4
     public float walkSpeedOffset = 0.5f;
     private bool isSprinting = false;
     private bool canSprint = true;
 
     public float currentStamina { get; private set; }
     public float maxStamina = 30.0f;
-    public float sprintStaminaTax = 7.5f;
+    public float sprintStaminaTax = 5.0f;   // lowered from 7.5 so sprint lasts ~6s instead of 4s
     public float sprintRegenRate = 5.0f;
 
     public AudioClip pantSound;
     private bool isPanting = false;
     public AudioClip walkSound;
     public AudioClip runSound;
-    
+
+    private bool isPlayingFootstep = false;
+    public float footstepInterval = 0.45f;
+    public float sprintFootstepInterval = 0.28f;
+    private float footstepTimer = 0.0f;
 
     private bool isGrounded;
     public LayerMask groundLayer;
@@ -80,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleSprint();
         HandleMovement();
+        HandleFootsteps();
     }
 
     // Cast ray below player position to check for ground beneath player
@@ -134,6 +139,29 @@ public class PlayerMovement : MonoBehaviour
     }
     
     
+    private void HandleFootsteps()
+    {
+        // No footsteps if not moving or not on the ground
+        if (m_moveAmt == Vector2.zero || !isGrounded)
+        {
+            footstepTimer = 0.0f;
+            return;
+        }
+
+        footstepTimer += Time.deltaTime;
+
+        float interval = isSprinting && canSprint ? sprintFootstepInterval : footstepInterval;
+
+        if (footstepTimer >= interval)
+        {
+            AudioClip clip = isSprinting && canSprint ? runSound : walkSound;
+            if (AudioController.Instance != null)
+                AudioController.Instance.PlaySoundClip(clip, 0.3f, 1);
+
+            footstepTimer = 0.0f;
+        }
+    }
+
     private void HandleMovement()
     {
         float h = m_moveAmt.x;

@@ -203,9 +203,15 @@ public class GameManager : MonoBehaviour
         {
             if (activeAlertStars == 5)
             {
-                DEBUG.Instance.didPlayerLose = true;
+                GameState.Instance.didPlayerLose = true;
+                GameState.Instance.endReason = "You were spotted too many times!";
             }
-            
+            else
+            {
+                GameState.Instance.didPlayerLose = false;
+                GameState.Instance.endReason = "Time's up! The logging crew has been driven off.";
+            }
+
             SceneController.Instance.GoToGameOver();
         }
     }

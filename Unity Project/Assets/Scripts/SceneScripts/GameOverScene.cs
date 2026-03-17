@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,77 +8,83 @@ public class GameOverScene : MonoBehaviour
     public InputActionReference jumpAction;
     public InputActionReference roarAction;
 
+    [Header("Win Screen")]
+    public GameObject winScreen;
+    public TextMeshProUGUI winHeaderText;
     public TextMeshProUGUI treeCountTopText;
     public TextMeshProUGUI treeCountText;
+
+    [Header("Lose Screen")]
+    public GameObject loseScreen;
+    public TextMeshProUGUI loseHeaderText;
+    public TextMeshProUGUI loseReasonText;
+
+    [Header("Shared - Scrolling Facts")]
     public TextMeshProUGUI fact1Text;
     public TextMeshProUGUI fact2Text;
+    public string[] wwfFacts;
+    public float factScrollSpeed = 10;
+
+    public Animator canvasAnimator;
 
     private bool slowText = false;
-    
-    public string[] wwfFacts;
+    private float currentTextSpeed;
 
     private bool isFact1OnScreen = false;
-
     private bool isFact2OnScreen = false;
-    public float factScrollSpeed = 10;
-    private float currentTextSpeed;
 
     private int fact1Index = 0;
     private int fact2Index = 0;
 
-    public Animator canvasAnimator;
     private float canvasAnimationTimer = 0.0f;
     private bool activeAnimationTimer = true;
 
-
-    public GameObject playerLoseText;
-    
-    // Start is called before the first frame update
     void Start()
     {
-        playerLoseText.SetActive(false);
-        
         currentTextSpeed = factScrollSpeed;
-        treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
-        
+
+        // Hold roar to slow the scrolling facts
         roarAction.action.started += ctx => slowText = true;
         roarAction.action.canceled += ctx => slowText = false;
 
-        if (DEBUG.Instance.didPlayerLose)
+        bool didLose = GameState.Instance.didPlayerLose;
+        string reason = GameState.Instance.endReason;
+
+        if (didLose)
         {
-            playerLoseText.SetActive(true);
-            treeCountText.gameObject.SetActive(false);
-            treeCountTopText.gameObject.SetActive(false);
+            // Show lose screen, hide win screen
+            loseScreen.SetActive(true);
+            winScreen.SetActive(false);
+
+            loseHeaderText.text = "CAUGHT!";
+            loseReasonText.text = reason != "" ? reason : "You were spotted too many times!";
         }
         else
         {
-            playerLoseText.SetActive(false);
-            treeCountText.gameObject.SetActive(true);
-            treeCountTopText.gameObject.SetActive(true);
+            // Show win screen, hide lose screen
+            winScreen.SetActive(true);
+            loseScreen.SetActive(false);
+
+            winHeaderText.text = "THE CREW FLED!";
+            treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
         }
     }
 
     void Update()
     {
+        // Press Jump/Confirm to return to splash
         if (jumpAction.action.WasPressedThisFrame())
         {
             SceneController.Instance.GoToSplash();
         }
-        
+
         if (activeAnimationTimer)
         {
             canvasAnimationTimer += Time.deltaTime;
         }
 
-        if (slowText)
-        {
-            currentTextSpeed = factScrollSpeed * 0.5f;
-        }
-        else
-        {
-            currentTextSpeed = factScrollSpeed;
-        }
-        
+        currentTextSpeed = slowText ? factScrollSpeed * 0.5f : factScrollSpeed;
+
         if (canvasAnimationTimer >= 1.0f)
         {
             canvasAnimator.SetBool("StartAnimation", true);
@@ -87,10 +92,6 @@ public class GameOverScene : MonoBehaviour
             canvasAnimationTimer = 0.0f;
         }
 
-
-        
-        
-        
         HandleFact1();
         HandleFact2();
     }
@@ -107,20 +108,19 @@ public class GameOverScene : MonoBehaviour
         if (fact1Text.rectTransform.anchoredPosition.y > 1000)
         {
             isFact1OnScreen = false;
-            fact1Text.rectTransform.anchoredPosition = new Vector2(fact1Text.rectTransform.anchoredPosition.x,
-                -900);
+            fact1Text.rectTransform.anchoredPosition = new Vector2(fact1Text.rectTransform.anchoredPosition.x, -900);
         }
-        
-        fact1Text.rectTransform.anchoredPosition = new Vector2(fact1Text.rectTransform.anchoredPosition.x,
+
+        fact1Text.rectTransform.anchoredPosition = new Vector2(
+            fact1Text.rectTransform.anchoredPosition.x,
             fact1Text.rectTransform.anchoredPosition.y + (currentTextSpeed * Time.deltaTime));
     }
-    
+
     private void HandleFact2()
     {
         if (!isFact2OnScreen)
         {
             GetNewFactIndex(2);
-            
             fact2Text.text = wwfFacts[fact2Index];
             isFact2OnScreen = true;
         }
@@ -128,11 +128,11 @@ public class GameOverScene : MonoBehaviour
         if (fact2Text.rectTransform.anchoredPosition.y > 1000)
         {
             isFact2OnScreen = false;
-            fact2Text.rectTransform.anchoredPosition = new Vector2(fact2Text.rectTransform.anchoredPosition.x,
-                -900);
+            fact2Text.rectTransform.anchoredPosition = new Vector2(fact2Text.rectTransform.anchoredPosition.x, -900);
         }
-        
-        fact2Text.rectTransform.anchoredPosition = new Vector2(fact2Text.rectTransform.anchoredPosition.x,
+
+        fact2Text.rectTransform.anchoredPosition = new Vector2(
+            fact2Text.rectTransform.anchoredPosition.x,
             fact2Text.rectTransform.anchoredPosition.y + (currentTextSpeed * Time.deltaTime));
     }
 
@@ -144,10 +144,8 @@ public class GameOverScene : MonoBehaviour
                 if (fact1Index == fact2Index)
                 {
                     fact1Index++;
-                    if (fact1Index > wwfFacts.Length)
-                    {
+                    if (fact1Index >= wwfFacts.Length)
                         fact1Index = 0;
-                    }
                 }
                 else
                 {
@@ -158,10 +156,8 @@ public class GameOverScene : MonoBehaviour
                 if (fact2Index == fact1Index)
                 {
                     fact2Index++;
-                    if (fact2Index > wwfFacts.Length)
-                    {
+                    if (fact2Index >= wwfFacts.Length)
                         fact2Index = 0;
-                    }
                 }
                 else
                 {

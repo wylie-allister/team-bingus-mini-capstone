@@ -1,23 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class StartScene : MonoBehaviour
 {
-    // Here we get the move action for vertical selection - horzontal is not needed for alpha
+    // Here we get the move action for vertical selection - horizontal is not needed for alpha
     // JumpAction input reference is just a neat selection key
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference jumpAction;
-    
+    // Back/Cancel to close the controls panel (e.g. B button / Escape)
+    [SerializeField] private InputActionReference backAction;
+
     private int selectionIndex = 0;
 
     public float selectedFontSize;
     public float deselectedFontSize;
-    
+
     [SerializeField] private TextMeshProUGUI startText;
     [SerializeField] private TextMeshProUGUI optionsText;
     [SerializeField] private TextMeshProUGUI quitText;
@@ -36,7 +36,7 @@ public class StartScene : MonoBehaviour
     public float overlayTime = 3.0f;
 
     private float sceneTimer = 0.0f;
-    
+
     void Start()
     {
         texts.Add(startText);
@@ -51,10 +51,18 @@ public class StartScene : MonoBehaviour
             sceneTimer += Time.deltaTime;
             return;
         }
-        
+
         if (blackOverlay.color.a != 0)
             blackOverlay.color = Color.Lerp(blackOverlay.color, transparentBlackColor, overlayTime * Time.deltaTime);
-        
+
+        // If controls panel is open, only listen for back input to close it
+        if (ControlsPanel.Instance != null && ControlsPanel.Instance.isOpen)
+        {
+            if (backAction != null && backAction.action.WasPressedThisFrame())
+                ControlsPanel.Instance.Close();
+            return;
+        }
+
         // Get input, handle selection and text
         float vertInput = moveAction.action.ReadValue<Vector2>().y;
         HandleNavigation(vertInput);
@@ -70,7 +78,7 @@ public class StartScene : MonoBehaviour
             }
         }
     }
-    
+
     // We use a bool (canNavigate) to ensure we dont move every frame
     // Input is a float and this is the simplest I can think of doing this rn -BC
     private void HandleNavigation(float input)
@@ -101,24 +109,21 @@ public class StartScene : MonoBehaviour
         // If selection has not been made, break from logic
         if (!jumpAction.action.WasPressedThisFrame())
             return;
-        
+
         // If selection is made, proceed with current selection variable
         switch (selectionIndex)
         {
             // Start selection
             case 0:
-                //Debug.Log("GOTO GAMEPLAY SCENE");
                 canvasAnimator.SetBool("StartAnimation", true);
-
-                //SceneController.Instance.GoToGameplay();
                 break;
-            // Options selection
+            // Controls selection - open the controls panel
             case 1:
-                //Debug.Log("GOTO OPTIONS");
+                if (ControlsPanel.Instance != null)
+                    ControlsPanel.Instance.Open();
                 break;
             // Quit selection
             case 2:
-                //Debug.Log("QUIT");
                 Application.Quit();
                 break;
         }

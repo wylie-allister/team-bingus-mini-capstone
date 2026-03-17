@@ -8,14 +8,22 @@ public class GameOverScene : MonoBehaviour
     public InputActionReference jumpAction;
     public InputActionReference roarAction;
 
-    // --- Existing fields (already wired up in the scene) ---
-    [Header("Tree Count (Win)")]
+    [Header("Lose Panel")]
+    // The existing caught log object already in the scene
+    public GameObject playerLoseText;
+
+    [Header("Win Panel")]
+    // Duplicate of the lose panel reskinned for win - assign in editor
+    public GameObject playerWinObject;
+    // Optional: TMP inside the win object for the header text
+    public TextMeshProUGUI winHeaderText;
+    // Optional: TMP inside the win object for tree count
+    public TextMeshProUGUI treeCountWinText;
+
+    [Header("Tree Count (fallback Win display)")]
+    // Original tree count texts - still shown if no winObject is assigned
     public TextMeshProUGUI treeCountTopText;
     public TextMeshProUGUI treeCountText;
-
-    [Header("Lose Panel")]
-    // The existing lose panel GameObject already set up in the scene
-    public GameObject playerLoseText;
 
     [Header("Scrolling Facts")]
     public TextMeshProUGUI fact1Text;
@@ -25,13 +33,9 @@ public class GameOverScene : MonoBehaviour
 
     public Animator canvasAnimator;
 
-    // --- New optional fields - assign in editor to get explicit messaging ---
-    // If left empty, the screen falls back to the original look
-    [Header("Explicit End Messaging (optional)")]
-    // A TextMeshPro inside playerLoseText to show why the player lost
+    // Optional: TMP inside playerLoseText to show the explicit reason
+    [Header("Optional Explicit Reason (Lose)")]
     public TextMeshProUGUI loseReasonText;
-    // A TextMeshPro shown on the win screen to say what happened
-    public TextMeshProUGUI winHeaderText;
 
     private bool slowText = false;
     private float currentTextSpeed;
@@ -52,19 +56,19 @@ public class GameOverScene : MonoBehaviour
         roarAction.action.started += ctx => slowText = true;
         roarAction.action.canceled += ctx => slowText = false;
 
-        treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
-
-        // Read lose state - guard in case GameState prefab hasn't been added to the scene yet
+        // Read lose state - guard in case GameState hasn't initialised yet
         bool didLose = GameState.Instance != null && GameState.Instance.didPlayerLose;
 
         if (didLose)
         {
-            // Show the lose panel, hide tree count
+            // Show caught panel, hide everything win-related
             playerLoseText.SetActive(true);
-            treeCountText.gameObject.SetActive(false);
-            treeCountTopText.gameObject.SetActive(false);
 
-            // Fill in explicit reason if the optional text field is wired up
+            if (playerWinObject != null) playerWinObject.SetActive(false);
+            if (treeCountText != null)    treeCountText.gameObject.SetActive(false);
+            if (treeCountTopText != null) treeCountTopText.gameObject.SetActive(false);
+
+            // Fill in explicit reason if the text field is wired up
             if (loseReasonText != null)
             {
                 string reason = GameState.Instance.endReason;
@@ -73,14 +77,34 @@ public class GameOverScene : MonoBehaviour
         }
         else
         {
-            // Win state - show tree count, hide lose panel
+            // Hide caught panel
             playerLoseText.SetActive(false);
-            treeCountText.gameObject.SetActive(true);
-            treeCountTopText.gameObject.SetActive(true);
 
-            // Fill in explicit win header if the optional text field is wired up
-            if (winHeaderText != null)
-                winHeaderText.text = "THE CREW FLED!";
+            if (playerWinObject != null)
+            {
+                // New win panel is set up - use it
+                playerWinObject.SetActive(true);
+
+                if (treeCountText != null)    treeCountText.gameObject.SetActive(false);
+                if (treeCountTopText != null) treeCountTopText.gameObject.SetActive(false);
+
+                if (winHeaderText != null)
+                    winHeaderText.text = "THE CREW FLED!";
+
+                // Show tree count inside the win panel if wired up
+                if (treeCountWinText != null)
+                    treeCountWinText.text = "Trees Saved: " + PlayerPrefs.GetInt("TreesSaved").ToString();
+            }
+            else
+            {
+                // Fallback: no win panel built yet, show original tree count texts
+                if (treeCountText != null)
+                {
+                    treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
+                    treeCountText.gameObject.SetActive(true);
+                }
+                if (treeCountTopText != null) treeCountTopText.gameObject.SetActive(true);
+            }
         }
     }
 

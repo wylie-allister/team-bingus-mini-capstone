@@ -47,7 +47,6 @@ public class GameOverScene : MonoBehaviour
 
     void Start()
     {
-        playerLoseText.SetActive(false);
         currentTextSpeed = factScrollSpeed;
 
         roarAction.action.started += ctx => slowText = true;
@@ -55,14 +54,17 @@ public class GameOverScene : MonoBehaviour
 
         treeCountText.text = PlayerPrefs.GetInt("TreesSaved").ToString();
 
-        if (GameState.Instance.didPlayerLose)
+        // Read lose state - guard in case GameState prefab hasn't been added to the scene yet
+        bool didLose = GameState.Instance != null && GameState.Instance.didPlayerLose;
+
+        if (didLose)
         {
-            // Show the lose panel - same as before
+            // Show the lose panel, hide tree count
             playerLoseText.SetActive(true);
             treeCountText.gameObject.SetActive(false);
             treeCountTopText.gameObject.SetActive(false);
 
-            // If an explicit reason text is wired up, fill it in
+            // Fill in explicit reason if the optional text field is wired up
             if (loseReasonText != null)
             {
                 string reason = GameState.Instance.endReason;
@@ -76,7 +78,7 @@ public class GameOverScene : MonoBehaviour
             treeCountText.gameObject.SetActive(true);
             treeCountTopText.gameObject.SetActive(true);
 
-            // If an explicit win header is wired up, fill it in
+            // Fill in explicit win header if the optional text field is wired up
             if (winHeaderText != null)
                 winHeaderText.text = "THE CREW FLED!";
         }

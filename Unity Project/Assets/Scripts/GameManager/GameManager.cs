@@ -201,15 +201,15 @@ public class GameManager : MonoBehaviour
 
         if (endGameAnimationTimer >= 1.7f)
         {
-            if (activeAlertStars == 5)
+            bool lost = activeAlertStars == 5;
+
+            // Guard: GameState may not be in the scene yet if prefab hasn't been updated
+            if (GameState.Instance != null)
             {
-                GameState.Instance.didPlayerLose = true;
-                GameState.Instance.endReason = "You were spotted too many times!";
-            }
-            else
-            {
-                GameState.Instance.didPlayerLose = false;
-                GameState.Instance.endReason = "Time's up! The logging crew has been driven off.";
+                GameState.Instance.didPlayerLose = lost;
+                GameState.Instance.endReason = lost
+                    ? "You were spotted too many times!"
+                    : "Time's up! The logging crew has been driven off.";
             }
 
             SceneController.Instance.GoToGameOver();

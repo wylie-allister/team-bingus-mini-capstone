@@ -75,15 +75,15 @@ public class TerrainGenerator : MonoBehaviour
     public void SpawnCamps()
     {
         // Camp spawn radius lies within the tree spawn radius
-        Vector2 campSpawnRadius = new Vector2(treeSpawnRadius.x- 5.0f, treeSpawnRadius.y - 5.0f);
-        
-        // Create new camps and append to list
-        for (int i = 0; i < camps.Count; i++)
+        Vector2 campSpawnRadius = new Vector2(treeSpawnRadius.x - 5.0f, treeSpawnRadius.y - 5.0f);
+
+        // Was previously looping camps.Count which starts at 0 - fixed to use campCount
+        for (int i = 0; i < campCount; i++)
         {
             GameObject newCamp = Instantiate(campPrefab);
-            newCamp.transform.position = new Vector3(Random.Range(-campSpawnRadius.x, campSpawnRadius.y), 0, Random.Range(-campSpawnRadius.y, campSpawnRadius.y));
-            //newCamp.transform.parent = campParent.transform;
-            
+            newCamp.transform.position = new Vector3(Random.Range(-campSpawnRadius.x, campSpawnRadius.x), 0, Random.Range(-campSpawnRadius.y, campSpawnRadius.y));
+            newCamp.transform.parent = campParent.transform;
+
             camps.Add(newCamp);
         }
     }

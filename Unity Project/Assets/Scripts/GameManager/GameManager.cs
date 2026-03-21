@@ -17,15 +17,19 @@ public class GameManager : MonoBehaviour
     [Header("Roar Mechanic")] 
     public RoarController roarController;
     
-    [Header("Alert Mechanic")] 
+    [Header("Alert Mechanic")]
     public int activeAlertStars = 0;
 
-    [Header("Marked Trees")] 
+    [Header("Marked Trees")]
     public int marksWiped = 0;
 
     public float timeBetweenStars = 2.0f;
     private float starTimer = 0.0f;
     private bool canAddActiveStar = true;
+
+    // How long without being spotted before a star decays
+    public float starDecayTime = 12.0f;
+    private float starDecayTimer = 0.0f;
 
     [Header("Trees")]
     public List<GameObject> trees;
@@ -95,13 +99,14 @@ public class GameManager : MonoBehaviour
 
     void CreateThrowables()
     {
+        // Use terrain spawn radius if available, otherwise fall back to a large default
+        float spawnRange = terrainGenerator != null ? terrainGenerator.treeSpawnRadius.x - 10f : 150f;
+
         for (int i = 0; i < throwableCount; i++)
         {
-            // Instantiate and set position to random position within -30x30 radius
             GameObject newThrowable = Instantiate(throwablePrefabs[Random.Range(0, throwablePrefabs.Length)]);
-            newThrowable.transform.position = new Vector3(Random.Range(-30, 30), 3, Random.Range(-30, 30));
-            
-            // Append to throwables
+            newThrowable.transform.position = new Vector3(Random.Range(-spawnRange, spawnRange), 3, Random.Range(-spawnRange, spawnRange));
+
             throwables.Add(newThrowable);
             newThrowable.transform.SetParent(throwableParent.transform);
         }
@@ -184,7 +189,24 @@ public class GameManager : MonoBehaviour
             canAddActiveStar = true;
             starTimer = 0.0f;
         }
-        
+
+        // Decay one star every starDecayTime seconds if the player is not being spotted
+        if (activeAlertStars > 0 && canAddActiveStar)
+        {
+            starDecayTimer += Time.deltaTime;
+            if (starDecayTimer >= starDecayTime)
+            {
+                RemoveAlertStar();
+                starDecayTimer = 0.0f;
+            }
+        }
+        else
+        {
+            // Reset decay timer whenever a star is freshly added
+            if (!canAddActiveStar)
+                starDecayTimer = 0.0f;
+        }
+
         if (activeAlertStars == 5)
         {
             activeEndGameTimer = true;

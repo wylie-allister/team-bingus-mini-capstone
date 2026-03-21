@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private float starTimer = 0.0f;
     private bool canAddActiveStar = true;
 
-    // How long without being spotted before a star decays
+    // time before a star decays if player isnt spotted
     public float starDecayTime = 12.0f;
     private float starDecayTimer = 0.0f;
 
@@ -57,11 +57,9 @@ public class GameManager : MonoBehaviour
     
     public bool gameOver = false;
 
-    // Total markable trees in the scene - counted on first frame so all camps have spawned
     private int _totalMarksRequired = -1;
 
     
-    // Create singleton instance for this object
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -102,7 +100,6 @@ public class GameManager : MonoBehaviour
 
     void CreateThrowables()
     {
-        // Use terrain spawn radius if available, otherwise fall back to a large default
         float spawnRange = terrainGenerator != null ? terrainGenerator.treeSpawnRadius.x - 10f : 150f;
 
         for (int i = 0; i < throwableCount; i++)
@@ -168,11 +165,10 @@ public class GameManager : MonoBehaviour
 
     void HandleGameTimer()
     {
-        // Count all Mark-tagged objects on the first frame - after all camps have spawned
+        // count mark objects on first frame
         if (_totalMarksRequired < 0)
             _totalMarksRequired = GameObject.FindGameObjectsWithTag("Mark").Length;
 
-        // Win immediately if all marks have been wiped
         if (_totalMarksRequired > 0 && marksWiped >= _totalMarksRequired && !gameOver)
         {
             gameOver = true;
@@ -180,7 +176,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Countdown game timer - also triggers win when it runs out
         if (timeRemaining >= 0)
         {
             timeRemaining -= Time.deltaTime;
@@ -204,7 +199,7 @@ public class GameManager : MonoBehaviour
             starTimer = 0.0f;
         }
 
-        // Decay one star every starDecayTime seconds if the player is not being spotted
+        // decay stars over time when player isnt being spotted
         if (activeAlertStars > 0 && canAddActiveStar)
         {
             starDecayTimer += Time.deltaTime;
@@ -216,7 +211,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Reset decay timer whenever a star is freshly added
             if (!canAddActiveStar)
                 starDecayTimer = 0.0f;
         }
@@ -239,7 +233,6 @@ public class GameManager : MonoBehaviour
         {
             bool lost = activeAlertStars == 5;
 
-            // Guard: GameState may not be in the scene yet if prefab hasn't been updated
             if (GameState.Instance != null)
             {
                 GameState.Instance.didPlayerLose = lost;

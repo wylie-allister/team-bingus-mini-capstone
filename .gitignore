@@ -38,6 +38,9 @@
 # Rider dir
 .idea/
 
+# Local editor config
+.claude/
+
 # Gradle cache directory
 .gradle/
 

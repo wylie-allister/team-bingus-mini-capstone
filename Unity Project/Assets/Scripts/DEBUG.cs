@@ -1,9 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-// Dev cheat: hold Roar + Jump + Debug simultaneously to reload to Splash.
-// Stays DontDestroyOnLoad so the cheat works from any scene.
 public class DEBUG : MonoBehaviour
 {
     public static DEBUG Instance;
@@ -40,6 +40,7 @@ public class DEBUG : MonoBehaviour
         debugAction.action.canceled += ctx => isDebug = false;
     }
 
+    // Hold roar + jump + debug to reload to splash
     void Update()
     {
         if (isRoar && isJump && isDebug)

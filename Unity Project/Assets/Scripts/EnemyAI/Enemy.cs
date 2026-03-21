@@ -29,14 +29,14 @@ public class Enemy : MonoBehaviour
     private float distractionTimer = 0.0f;
     public float distractTimeDelay = 0.8f;  // lowered from 1.1s for snappier enemy reaction to throws
 
-    // How long the exclaim/question markers stay visible after the trigger clears
+    // how long exclaim/question markers stay visible after trigger clears
     private float exclaimLingerTimer = 0.0f;
     private float questionLingerTimer = 0.0f;
-    private const float markerLingerTime = 1.2f;
+    private float markerLingerTime = 1.2f;
 
-    // Stuck detection - if agent stops mid-patrol, nudge it back on track
+    // if agent stops moving for too long, reset it
     private float stuckTimer = 0.0f;
-    private const float stuckTimeLimit = 3.0f;
+    private float stuckTimeLimit = 3.0f;
     private Vector3 lastPosition;
 
     void Start()
@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour
         HandleStuckDetection();
     }
 
-    // Handles linger timers so markers stay visible briefly after the trigger clears
+    // keep markers visible for a moment after trigger clears
     void HandleMarkerDisplay()
     {
         if (hasSpottedSas)
@@ -111,7 +111,6 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            // Player left line of sight - only reset if timer hasnt fired yet
             if (!hasSpottedSas)
                 sasSpotTimer = 0.0f;
         }
@@ -183,13 +182,11 @@ public class Enemy : MonoBehaviour
         // Set navagent dest to spawn point if at guard point
         else if (IsAtPointWithinRange(guardPoint, 1f))
         {
-            // Pick a new guard point each time we arrive, keeps patrol feeling fresh
             guardPoint = GetNewGuardPoint();
             agent.SetDestination(spawnPoint);
         }
     }
 
-    // If the enemy hasn't moved in stuckTimeLimit seconds, reset to a new guard point
     void HandleStuckDetection()
     {
         if (isDistracted)
@@ -216,12 +213,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Returns a new guard point near the spawn, checking that it lands on the NavMesh
     Vector3 GetNewGuardPoint()
     {
         Vector3 candidate = spawnPoint + new Vector3(Random.Range(-5f, 5f), 0, Random.Range(-5f, 5f));
 
-        // Sample the NavMesh to make sure the point is reachable
         if (NavMesh.SamplePosition(candidate, out NavMeshHit navHit, 5f, NavMesh.AllAreas))
             return navHit.position;
 
@@ -264,7 +259,6 @@ public class Enemy : MonoBehaviour
 
         if (distractionTimer >= distractTimeDelay)
         {
-            // shouldRunAway stays false for thrown item distractions - enemies investigate, not flee
             distractionSourcePosition = lastThrowable.gameObject.transform.position;
             shouldTriggerHuh = true;
             isDistracted = true;

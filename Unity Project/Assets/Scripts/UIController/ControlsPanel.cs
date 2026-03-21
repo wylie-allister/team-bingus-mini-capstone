@@ -1,13 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-// Attach to the Controls Panel GameObject in the StartScene canvas.
-// The panel should contain an Image with the controllerControls sprite.
-// StartScene.cs calls Open() / Close() on this.
 public class ControlsPanel : MonoBehaviour
 {
     public static ControlsPanel Instance;
 
-    public bool isOpen { get; private set; } = false;
+    public bool isOpen = false;
 
     void Awake()
     {
@@ -20,7 +19,6 @@ public class ControlsPanel : MonoBehaviour
             Instance = this;
         }
 
-        // Start hidden
         gameObject.SetActive(false);
     }
 

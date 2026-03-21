@@ -1,15 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Handles pausing, time scale, and cursor lock.
-// Attach to any scene object in the Gameplay scene - does not need to persist.
 public class PauseController : MonoBehaviour
 {
     public static PauseController Instance;
 
     public InputActionReference pauseAction;
 
-    public bool isGamePaused { get; private set; } = false;
+    public bool isGamePaused = false;
 
     void Awake()
     {
@@ -42,7 +42,7 @@ public class PauseController : MonoBehaviour
             Time.timeScale = 1f;
         }
 
-        // Keep pause panel in sync with pause state
+        // keep pause panel in sync
         if (UIController.Instance != null)
             UIController.Instance.pausePanel.SetActive(isGamePaused);
     }

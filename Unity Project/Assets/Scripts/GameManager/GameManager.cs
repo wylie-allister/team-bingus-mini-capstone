@@ -57,6 +57,9 @@ public class GameManager : MonoBehaviour
     
     public bool gameOver = false;
 
+    // Total markable trees in the scene - counted on first frame so all camps have spawned
+    private int _totalMarksRequired = -1;
+
     
     // Create singleton instance for this object
     void Awake()
@@ -165,9 +168,12 @@ public class GameManager : MonoBehaviour
 
     void HandleGameTimer()
     {
-        // Win immediately if all camp marks have been wiped
-        // Use SpawnedCampCount (actual camps in scene) not campCount (inspector target)
-        if (terrainGenerator != null && marksWiped >= terrainGenerator.SpawnedCampCount && marksWiped > 0 && !gameOver)
+        // Count all Mark-tagged objects on the first frame - after all camps have spawned
+        if (_totalMarksRequired < 0)
+            _totalMarksRequired = GameObject.FindGameObjectsWithTag("Mark").Length;
+
+        // Win immediately if all marks have been wiped
+        if (_totalMarksRequired > 0 && marksWiped >= _totalMarksRequired && !gameOver)
         {
             gameOver = true;
             activeEndGameTimer = true;

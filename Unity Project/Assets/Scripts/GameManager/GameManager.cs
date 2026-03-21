@@ -165,8 +165,16 @@ public class GameManager : MonoBehaviour
 
     void HandleGameTimer()
     {
-        // Countdown game timer
-        if (timeRemaining >= 0 )
+        // Win immediately if all camp marks have been wiped
+        if (terrainGenerator != null && marksWiped >= terrainGenerator.campCount && !gameOver)
+        {
+            gameOver = true;
+            activeEndGameTimer = true;
+            return;
+        }
+
+        // Countdown game timer - also triggers win when it runs out
+        if (timeRemaining >= 0)
         {
             timeRemaining -= Time.deltaTime;
         }
@@ -174,7 +182,6 @@ public class GameManager : MonoBehaviour
         {
             gameOver = true;
             activeEndGameTimer = true;
-
         }
     }
 

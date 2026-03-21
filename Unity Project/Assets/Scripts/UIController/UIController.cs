@@ -141,5 +141,8 @@ public class UIController : MonoBehaviour
     public void IncreaseTreeCount()
     {
         treeCount++;
+        // Keep GameManager in sync so the win condition can check marks wiped
+        if (GameManager.Instance != null)
+            GameManager.Instance.marksWiped++;
     }
 }

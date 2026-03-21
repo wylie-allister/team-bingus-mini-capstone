@@ -166,7 +166,8 @@ public class GameManager : MonoBehaviour
     void HandleGameTimer()
     {
         // Win immediately if all camp marks have been wiped
-        if (terrainGenerator != null && marksWiped >= terrainGenerator.campCount && !gameOver)
+        // Use SpawnedCampCount (actual camps in scene) not campCount (inspector target)
+        if (terrainGenerator != null && marksWiped >= terrainGenerator.SpawnedCampCount && marksWiped > 0 && !gameOver)
         {
             gameOver = true;
             activeEndGameTimer = true;

@@ -15,11 +15,14 @@ public class TerrainGenerator : MonoBehaviour
     public List<GameObject> trees = new List<GameObject>();
     public float treeSpacingOffset = 2.0f;
     
-    [Header("Camps")] 
+    [Header("Camps")]
     public GameObject campPrefab;
     List<GameObject> camps = new List<GameObject>();
     public GameObject campParent;
     public int campCount = 5;
+
+    // Actual number of camps that successfully spawned - use this for win condition
+    public int SpawnedCampCount => camps.Count;
     
     [Header("Grass")]
     public GameObject grassPrefab;

@@ -31,6 +31,9 @@ public class ItemController : MonoBehaviour
         private set;
     }
 
+    [Header("Facts Handler")]
+    public FactPopup factsPopup;
+
     // Enable Input Actions Map
     private void OnEnable()
     {
@@ -141,6 +144,7 @@ public class ItemController : MonoBehaviour
             UIController.Instance.IncreaseTreeCount();
             AudioController.Instance.PlaySoundClip(sasScratch, 1.0f);
             Destroy(mark);
+            factsPopup.FactRandomizer();
         }
     }
 

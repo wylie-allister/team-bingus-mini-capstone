@@ -42,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform cam;
 
+    public GameObject sprintHighlight;
+
     // Enable Input Actions Map
     private void OnEnable()
     {
@@ -112,11 +114,13 @@ public class PlayerMovement : MonoBehaviour
             if (currentStamina < maxStamina)
             {
                 currentStamina += sprintRegenRate * Time.deltaTime;
+            sprintHighlight.SetActive(false);
             }
             else
             {
                 currentStamina = maxStamina;
                 canSprint = true;
+            sprintHighlight.SetActive(true);
             }
             
        // }

@@ -18,6 +18,7 @@ public class RoarController : MonoBehaviour
     public float roarMaxCharge = 30.0f;
     private float roarRange = 10.0f;
     public GameObject roarCollider;
+    public GameObject roarHighlight;
     
     [Header("Audio")]
     public AudioClip roarSound;
@@ -77,7 +78,17 @@ public class RoarController : MonoBehaviour
             canRoar = false;
         }
 
-        HandleRoarCollider();
+        //adds highlight when full (this is unoptimized I know, I simply cannot be assed)
+        if (roarCharge == 30f)
+        {
+            roarHighlight.SetActive(true);
+        }
+        else if (roarCharge <=29.9f)
+        {
+            roarHighlight.SetActive(false);
+        }
+
+            HandleRoarCollider();
     }
 
     void HandleRoarCollider()

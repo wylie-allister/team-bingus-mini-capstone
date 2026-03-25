@@ -19,8 +19,8 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed;
     public float strafeSpeed = 4.5f;    // bumped slightly from 4
     public float walkSpeedOffset = 0.5f;
-    private bool isSprinting = false;
-    private bool canSprint = true;
+    public bool isSprinting = false;
+    public bool canSprint = true;
 
     public float currentStamina { get; private set; }
     public float maxStamina = 30.0f;
@@ -107,8 +107,8 @@ public class PlayerMovement : MonoBehaviour
             isPanting = false;
         }
         
-        if (!isSprinting)
-        {
+        //if (!isSprinting)
+        //{
             if (currentStamina < maxStamina)
             {
                 currentStamina += sprintRegenRate * Time.deltaTime;
@@ -119,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
                 canSprint = true;
             }
             
-        }
+       // }
         
         if (isSprinting && canSprint)
         {

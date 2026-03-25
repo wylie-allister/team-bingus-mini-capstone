@@ -124,4 +124,10 @@ public class Camp : MonoBehaviour
 
         return false;
     }
+
+    public void RemoveSmoke()
+    {
+        //when a mark is scratched, remove smoke from loggingtruckprefab. It is late at night and I am too stupid to figure out how to do this right now,
+        //so this is being left here as a reminder to do it
+    }
 }

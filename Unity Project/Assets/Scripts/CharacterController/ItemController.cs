@@ -143,6 +143,7 @@ public class ItemController : MonoBehaviour
         {
             UIController.Instance.IncreaseTreeCount();
             AudioController.Instance.PlaySoundClip(sasScratch, 1.0f);
+            mark.GetComponentInParent<Camp>()?.DisableSmoke();
             Destroy(mark);
             factsPopup.FactRandomizer();
         }

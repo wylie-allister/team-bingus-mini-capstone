@@ -9,6 +9,8 @@ public class Camp : MonoBehaviour
     [SerializeField] private GameObject _loggingTruckPrefab;
     [SerializeField] private GameObject _enemyPrefab;
 
+    private ParticleSystem _smokeFX;
+
     [Header("Enemies")]
     [SerializeField] private int _campEnemyCount = 4;
     // Swap this to global enemy if necessary
@@ -60,6 +62,7 @@ public class Camp : MonoBehaviour
         
         _loggingTruckObject = GameObject.Instantiate(_loggingTruckPrefab, this.transform);
         _loggingTruckObject.transform.position = this.transform.position + _loggingTruckPositionOffset;
+        _smokeFX = _loggingTruckObject.GetComponentInChildren<ParticleSystem>();
         
         
         // Set instantiated prefab parents to Camp object
@@ -125,9 +128,9 @@ public class Camp : MonoBehaviour
         return false;
     }
 
-    public void RemoveSmoke()
+    public void DisableSmoke()
     {
-        //when a mark is scratched, remove smoke from loggingtruckprefab. It is late at night and I am too stupid to figure out how to do this right now,
-        //so this is being left here as a reminder to do it
+        if (_smokeFX != null)
+            _smokeFX.Stop();
     }
 }

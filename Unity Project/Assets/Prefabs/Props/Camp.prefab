@@ -47,14 +47,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b78c7360ad5f4540bb2be8aa4f20339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _markedTreePrefab: {fileID: 346334049356080715, guid: 80d1c92c27ce9544cb4c5b49f821a14e, type: 3}
+  _markedTreePrefab: {fileID: 4231734056911106574, guid: 2fb94f6eb414b2741828a98ebf958007, type: 3}
   _loggingTruckPrefab: {fileID: 9203945236095473122, guid: 2085cf298433e0b4aa063faba6cdc6d5, type: 3}
-  _enemyPrefab: {fileID: 1548126887056500522, guid: 60e84b662a80deb4a927da4187a87ce1, type: 3}
+  _enemyPrefab: {fileID: 3464604820053700088, guid: ebefa159456545844a94d398448269a5, type: 3}
+  _logPrefab: {fileID: 515370745329625920, guid: 381c1aac55f51134e9e400fcb4cdf946, type: 3}
+  _stumpPrefab: {fileID: 8241655487804192418, guid: b4a0f18fea67d824c98c382671955ef8, type: 3}
   _campEnemyCount: 4
   _treeRemovalRadius: 9
   _enemySpawnRadius: 10
-  _markedTreePositionOffset: {x: 2.59, y: 0, z: 3.88}
+  _markedTreePositionOffset: {x: 2.59, y: 8, z: 3.88}
   _loggingTruckPositionOffset: {x: -1.9, y: 0, z: -5.93}
+  _logPositionOffset: {x: -8.68, y: 0.4, z: 1.49}
+  _stumpPositionOffset: {x: 3.37, y: 1.8, z: -4.35}
+  _loggerPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!135 &1469018621670053026
 SphereCollider:
   m_ObjectHideFlags: 0

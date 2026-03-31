@@ -8,6 +8,8 @@ public class Camp : MonoBehaviour
     [SerializeField] private GameObject _markedTreePrefab;
     [SerializeField] private GameObject _loggingTruckPrefab;
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _logPrefab;
+    [SerializeField] private GameObject _stumpPrefab;
 
     private ParticleSystem _smokeFX;
 
@@ -19,18 +21,23 @@ public class Camp : MonoBehaviour
     
     private GameObject _markedTreeObject;
     private GameObject _loggingTruckObject;
+    private GameObject _stumpObject;
+    private GameObject _logObject;
 
     [Header("Position Offsets")]
     [SerializeField] private float _treeRemovalRadius = 9.0f;
     [SerializeField] private float _enemySpawnRadius = 5.0f;
     [SerializeField] private Vector3 _markedTreePositionOffset = new Vector3();
     [SerializeField] private Vector3 _loggingTruckPositionOffset = new Vector3();
-    
+    [SerializeField] private Vector3 _logPositionOffset = new Vector3();
+    [SerializeField] private Vector3 _stumpPositionOffset = new Vector3();
+    [SerializeField] private Vector3 _loggerPositionOffset = new Vector3();
+
 
     void Start()
     {
         // If prefabs are missing from the gameobject, throw error
-        if (_markedTreePrefab == null || _loggingTruckPrefab == null || _enemyPrefab == null)
+        if (_markedTreePrefab == null || _loggingTruckPrefab == null || _enemyPrefab == null || _logPrefab == null || _stumpPrefab == null)
         {
             Debug.LogError("Camp Prefabs are not set");
         }
@@ -52,7 +59,7 @@ public class Camp : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
            GameObject newEnemy = GameObject.Instantiate(_enemyPrefab, this.transform);
-           newEnemy.transform.position = this.transform.position;
+           newEnemy.transform.position = this.transform.position + _loggerPositionOffset;
            _enemies.Add(newEnemy);
         }
 
@@ -62,6 +69,13 @@ public class Camp : MonoBehaviour
         
         _loggingTruckObject = GameObject.Instantiate(_loggingTruckPrefab, this.transform);
         _loggingTruckObject.transform.position = this.transform.position + _loggingTruckPositionOffset;
+
+        _logObject = GameObject.Instantiate(_logPrefab, this.transform);
+        _logObject.transform.position = this.transform.position + _logPositionOffset;
+
+        _stumpObject = GameObject.Instantiate(_stumpPrefab, this.transform);
+        _stumpObject.transform.position = this.transform.position + _stumpPositionOffset;
+
         _smokeFX = _loggingTruckObject.GetComponentInChildren<ParticleSystem>();
         
         

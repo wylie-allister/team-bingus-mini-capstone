@@ -1,0 +1,153 @@
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
+
+public class StartScene : MonoBehaviour
+{
+    // Here we get the move action for vertical selection - horizontal is not needed for alpha
+    // JumpAction input reference is just a neat selection key
+    [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference jumpAction;
+    // Back/Cancel to close the controls panel (e.g. B button / Escape)
+    [SerializeField] private InputActionReference backAction;
+
+    private int selectionIndex = 0;
+
+    public float selectedFontSize;
+    public float deselectedFontSize;
+
+    [SerializeField] private TextMeshProUGUI startText;
+    [SerializeField] private TextMeshProUGUI optionsText;
+    [SerializeField] private TextMeshProUGUI quitText;
+    private List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
+
+    private bool canNavigate = true;
+
+    public Color selectedColor;
+    public Color deselectedColor;
+
+    public Animator canvasAnimator;
+    private float canvasAnimationTimer = 0.0f;
+
+    public Image blackOverlay;
+    private Color transparentBlackColor = new Color(0, 0, 0, 0);
+    public float overlayTime = 3.0f;
+
+    private float sceneTimer = 0.0f;
+
+    void Start()
+    {
+        texts.Add(startText);
+        texts.Add(optionsText);
+        texts.Add(quitText);
+    }
+
+    void Update()
+    {
+        if (sceneTimer < 0.9f)
+        {
+            sceneTimer += Time.deltaTime;
+            return;
+        }
+
+        if (blackOverlay.color.a != 0)
+            blackOverlay.color = Color.Lerp(blackOverlay.color, transparentBlackColor, overlayTime * Time.deltaTime);
+
+        // If controls panel is open, only listen for back input to close it
+        if (ControlsPanel.Instance != null && ControlsPanel.Instance.isOpen)
+        {
+            if (backAction != null && backAction.action.WasPressedThisFrame())
+                ControlsPanel.Instance.Close();
+            return;
+        }
+
+        // Get input, handle selection and text
+        float vertInput = moveAction.action.ReadValue<Vector2>().y;
+        HandleNavigation(vertInput);
+        HandleSelection();
+        HandleText();
+
+        if (canvasAnimator.GetBool("StartAnimation"))
+        {
+            canvasAnimationTimer += Time.deltaTime;
+            if (canvasAnimationTimer >= 1.72f)
+            {
+                SceneController.Instance.GoToCutscene();
+            }
+        }
+    }
+
+    // We use a bool (canNavigate) to ensure we dont move every frame
+    // Input is a float and this is the simplest I can think of doing this rn -BC
+    private void HandleNavigation(float input)
+    {
+        // If theres no input, set navigate to true and break logic
+        if (input == 0)
+        {
+            canNavigate = true;
+            return;
+        }
+
+        // If we receive an up input, decrement selection index and bool-break from logic
+        if (input > 0 && selectionIndex > 0 && canNavigate)
+        {
+            selectionIndex--;
+            canNavigate = false;
+        }
+        // If we receive a down input, increment selection index and bool-break from logic
+        else if (input < 0 && selectionIndex < texts.Count - 1 && canNavigate)
+        {
+            selectionIndex++;
+            canNavigate = false;
+        }
+    }
+
+    private void HandleSelection()
+    {
+        // If selection has not been made, break from logic
+        if (!jumpAction.action.WasPressedThisFrame())
+            return;
+
+        // If selection is made, proceed with current selection variable
+        switch (selectionIndex)
+        {
+            // Start selection
+            case 0:
+                canvasAnimator.SetBool("StartAnimation", true);
+                break;
+            // Controls selection - open the controls panel
+            case 1:
+                if (ControlsPanel.Instance != null)
+                    ControlsPanel.Instance.Open();
+                break;
+            // Quit selection
+            case 2:
+                Application.Quit();
+                break;
+        }
+    }
+
+    private void HandleText()
+    {
+        // Loop through our texts
+        for (int currentTextIndex = 0; currentTextIndex < texts.Count; currentTextIndex++)
+        {
+            // If we are on the currently selected text, increase fontsize
+            if (currentTextIndex == selectionIndex)
+            {
+                texts[currentTextIndex].color = selectedColor;
+                texts[currentTextIndex].fontSize = selectedFontSize;
+                continue;
+            }
+
+            // If we are not on the currently selected text, decrease fontsize
+            if (texts[currentTextIndex].fontSize != deselectedFontSize)
+            {
+                texts[currentTextIndex].color = deselectedColor;
+                texts[currentTextIndex].fontSize = deselectedFontSize;
+            }
+        }
+    }
+}

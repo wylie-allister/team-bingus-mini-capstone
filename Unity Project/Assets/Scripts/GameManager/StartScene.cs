@@ -74,7 +74,7 @@ public class StartScene : MonoBehaviour
             canvasAnimationTimer += Time.deltaTime;
             if (canvasAnimationTimer >= 1.72f)
             {
-                SceneController.Instance.GoToGameplay();
+                SceneController.Instance.GoToCutscene();
             }
         }
     }

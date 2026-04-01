@@ -57,4 +57,9 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene("Splash");
     }
+    
+    public void GoToCutscene()
+    {
+        SceneManager.LoadScene("Cutscene_SasSitting");
+    }
 }

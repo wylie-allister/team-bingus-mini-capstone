@@ -140,6 +140,10 @@ public class ItemController : MonoBehaviour
         {
             UIController.Instance.IncreaseTreeCount();
             AudioController.Instance.PlaySoundClip(sasScratch, 1.0f);
+            
+            // This is absolutely disgusting, HOWEVER,
+            // disable smoke from camp script -Brandon
+            mark.transform.parent.parent.GetComponent<Camp>().disableSmoke = true;
             Destroy(mark);
         }
     }

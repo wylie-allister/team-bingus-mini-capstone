@@ -8,6 +8,7 @@ public class Camp : MonoBehaviour
     [SerializeField] private GameObject _markedTreePrefab;
     [SerializeField] private GameObject _loggingTruckPrefab;
     [SerializeField] private GameObject _enemyPrefab;
+    private GameObject smokeObject;
 
     [Header("Enemies")]
     [SerializeField] private int _campEnemyCount = 4;
@@ -17,6 +18,7 @@ public class Camp : MonoBehaviour
     
     private GameObject _markedTreeObject;
     private GameObject _loggingTruckObject;
+    public bool disableSmoke = false;
 
     [Header("Position Offsets")]
     [SerializeField] private float _treeRemovalRadius = 9.0f;
@@ -39,6 +41,7 @@ public class Camp : MonoBehaviour
         // Update enemy spawn positions
         UpdateEnemySpawnPositions();
 
+        smokeObject = _loggingTruckObject.GetComponentInChildren<ParticleSystem>().gameObject;
         
         //------------Make this work
         //RemoveTreesNearCamp(GameManager.Instance.terrainGenerator.trees);
@@ -90,7 +93,10 @@ public class Camp : MonoBehaviour
     void Update()
     {
         // Apply position offsets to given objects
-        
+        if (disableSmoke)
+        {
+            smokeObject.SetActive(false);
+        }
     }
 
     void RemoveTreesNearCamp(List<GameObject> trees)

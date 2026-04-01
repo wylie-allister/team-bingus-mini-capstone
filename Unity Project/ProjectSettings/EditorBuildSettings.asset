@@ -17,5 +17,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BuildScenes/GameOver.unity
     guid: 67bd2a9a2499fb143bde93e802530f4e
+  - enabled: 1
+    path: Assets/Scenes/Dev/Cutscene/Cutscene_SasSitting.unity
+    guid: 3e1938877db50d147b63fc51ae45a316
+  - enabled: 1
+    path: Assets/Scenes/Dev/Cutscene/Cutscene_SasChillin.unity
+    guid: 51048c6d29568ea46b6f16a5389b1004
+  - enabled: 1
+    path: Assets/Scenes/Dev/Cutscene/Cutscene_Loggers.unity
+    guid: ded63664cbd047149a0ef1c878a15282
+  - enabled: 1
+    path: Assets/Scenes/Dev/Cutscene/Cutscene_SasDecision.unity
+    guid: 4527a630abd850644bad3a9597ed527e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: dc2f4651398e52f44898b261fd6d4437, type: 3}

@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] throwablePrefabs;
     public GameObject throwableParent;
     public int throwableCount = 50;
+    public int throwablesPerCamp = 6;
     private List<GameObject> throwables =  new List<GameObject>();
 
     public GameObject[] cloudPrefabs;
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
     
     public bool gameOver = false;
 
-    private int _totalMarksRequired = -1;
+    public int totalMarksRequired = -1;
 
     
     void Awake()
@@ -101,12 +102,31 @@ public class GameManager : MonoBehaviour
     void CreateThrowables()
     {
         float spawnRange = terrainGenerator != null ? terrainGenerator.treeSpawnRadius.x - 10f : 150f;
+        int campThrowablesSpawned = 0;
 
-        for (int i = 0; i < throwableCount; i++)
+        // spawn a cluster near each camp so players always have something nearby
+        if (terrainGenerator != null)
+        {
+            foreach (GameObject camp in terrainGenerator.camps)
+            {
+                for (int i = 0; i < throwablesPerCamp; i++)
+                {
+                    Vector3 pos = camp.transform.position + new Vector3(Random.Range(-15f, 15f), 3, Random.Range(-15f, 15f));
+                    GameObject newThrowable = Instantiate(throwablePrefabs[Random.Range(0, throwablePrefabs.Length)]);
+                    newThrowable.transform.position = pos;
+                    throwables.Add(newThrowable);
+                    newThrowable.transform.SetParent(throwableParent.transform);
+                    campThrowablesSpawned++;
+                }
+            }
+        }
+
+        // scatter remaining throwables across the map
+        int remaining = throwableCount - campThrowablesSpawned;
+        for (int i = 0; i < remaining; i++)
         {
             GameObject newThrowable = Instantiate(throwablePrefabs[Random.Range(0, throwablePrefabs.Length)]);
             newThrowable.transform.position = new Vector3(Random.Range(-spawnRange, spawnRange), 3, Random.Range(-spawnRange, spawnRange));
-
             throwables.Add(newThrowable);
             newThrowable.transform.SetParent(throwableParent.transform);
         }
@@ -166,10 +186,10 @@ public class GameManager : MonoBehaviour
     void HandleGameTimer()
     {
         // count mark objects on first frame
-        if (_totalMarksRequired < 0)
-            _totalMarksRequired = GameObject.FindGameObjectsWithTag("Mark").Length;
+        if (totalMarksRequired < 0)
+            totalMarksRequired = GameObject.FindGameObjectsWithTag("Mark").Length;
 
-        if (_totalMarksRequired > 0 && marksWiped >= _totalMarksRequired && !gameOver)
+        if (totalMarksRequired > 0 && marksWiped >= totalMarksRequired && !gameOver)
         {
             gameOver = true;
             activeEndGameTimer = true;

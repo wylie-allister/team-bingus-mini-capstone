@@ -122,7 +122,9 @@ public class UIController : MonoBehaviour
 
     private void HandleTreeCount()
     {
-        treeCountText.text = treeCount.ToString();
+        int total = GameManager.Instance.totalMarksRequired;
+        string totalStr = total > 0 ? total.ToString() : "?";
+        treeCountText.text = treeCount + "/" + totalStr;
     }
     
     // Helper function to normalize slider values between 0 and 1

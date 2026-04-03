@@ -17,7 +17,7 @@ public class TerrainGenerator : MonoBehaviour
     
     [Header("Camps")]
     public GameObject campPrefab;
-    List<GameObject> camps = new List<GameObject>();
+    public List<GameObject> camps = new List<GameObject>();
     public GameObject campParent;
     public int campCount = 5;
 
@@ -34,12 +34,11 @@ public class TerrainGenerator : MonoBehaviour
     void Awake()
     {
         HandleTreeRandomization();
+        SpawnCamps();
     }
-    
+
     void Start()
     {
-        SpawnCamps();
-
     }
 
     void Update()

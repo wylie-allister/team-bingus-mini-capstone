@@ -8,35 +8,38 @@ public class ControlsPanel : MonoBehaviour
 
     public bool isOpen = false;
 
-    void Awake()
+    public GameObject controlsPanelObject;
+
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
         else
         {
             Instance = this;
         }
 
-        gameObject.SetActive(false);
+        controlsPanelObject.SetActive(false);
     }
 
     public void Open()
     {
         isOpen = true;
-        gameObject.SetActive(true);
+        controlsPanelObject.SetActive(true);
     }
 
     public void Close()
     {
         isOpen = false;
-        gameObject.SetActive(false);
+        controlsPanelObject.SetActive(false);
     }
 
     public void Toggle()
     {
-        if (isOpen) Close();
-        else Open();
+        isOpen = !isOpen;
+        controlsPanelObject.SetActive(isOpen);
+        
     }
 }
